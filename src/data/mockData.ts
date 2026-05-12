@@ -1,0 +1,268 @@
+import {
+  DailyReport,
+  AttendanceRecord,
+  Conversation,
+  Invoice,
+  GalleryPhoto,
+  Notification,
+  Event,
+} from '../types';
+
+export const MOCK_DAILY_REPORTS: DailyReport[] = [
+  {
+    id: 'report_1',
+    childId: 'child_1',
+    date: '2026-05-12',
+    mood: 'happy',
+    meals: [
+      { type: 'breakfast', time: '08:30', consumed: 'all', items: ['Oatmeal', 'Banana', 'Milk'] },
+      { type: 'lunch', time: '12:00', consumed: 'most', items: ['Chicken soup', 'Bread', 'Apple juice'] },
+      { type: 'snack', time: '15:00', consumed: 'all', items: ['Crackers', 'Cheese', 'Water'] },
+    ],
+    naps: [{ startTime: '13:00', endTime: '14:30', duration: 90 }],
+    activities: [
+      'Finger painting',
+      'Outdoor playground time',
+      'Story time: "The Very Hungry Caterpillar"',
+      'Music and movement',
+      'Puzzle activity',
+    ],
+    notes: 'Emma had a fantastic day! She was very engaged during art time and made a beautiful butterfly painting. She helped her classmates clean up after activities and showed great leadership skills.',
+    photos: [
+      'https://picsum.photos/400/300?random=1',
+      'https://picsum.photos/400/300?random=2',
+      'https://picsum.photos/400/300?random=3',
+    ],
+    teacherName: 'Ms. Patricia Williams',
+  },
+  {
+    id: 'report_2',
+    childId: 'child_1',
+    date: '2026-05-11',
+    mood: 'excited',
+    meals: [
+      { type: 'breakfast', time: '08:30', consumed: 'all', items: ['Pancakes', 'Orange juice'] },
+      { type: 'lunch', time: '12:00', consumed: 'all', items: ['Mac and cheese', 'Green beans', 'Milk'] },
+      { type: 'snack', time: '15:00', consumed: 'most', items: ['Yogurt', 'Berries'] },
+    ],
+    naps: [{ startTime: '13:00', endTime: '14:45', duration: 105 }],
+    activities: [
+      'Science experiment: growing plants',
+      'Dance class',
+      'Free play',
+      'Reading circle',
+    ],
+    notes: 'Emma was very excited about planting seeds today. She asked many questions about how plants grow and was eager to water her pot.',
+    photos: [
+      'https://picsum.photos/400/300?random=4',
+      'https://picsum.photos/400/300?random=5',
+    ],
+    teacherName: 'Ms. Patricia Williams',
+  },
+  {
+    id: 'report_3',
+    childId: 'child_1',
+    date: '2026-05-10',
+    mood: 'neutral',
+    meals: [
+      { type: 'breakfast', time: '08:30', consumed: 'most', items: ['Toast', 'Eggs', 'Milk'] },
+      { type: 'lunch', time: '12:00', consumed: 'some', items: ['Pasta', 'Salad', 'Water'] },
+      { type: 'snack', time: '15:00', consumed: 'all', items: ['Apple slices', 'Peanut-free butter'] },
+    ],
+    naps: [{ startTime: '13:00', endTime: '15:00', duration: 120 }],
+    activities: ['Block building', 'Coloring', 'Outdoor walk'],
+    notes: 'Emma seemed a little tired today and needed more nap time. She was otherwise in good spirits.',
+    photos: ['https://picsum.photos/400/300?random=6'],
+    teacherName: 'Ms. Patricia Williams',
+  },
+];
+
+export const MOCK_ATTENDANCE: AttendanceRecord[] = [
+  { id: 'att_1', childId: 'child_1', date: '2026-05-12', checkIn: '08:15', checkOut: undefined, status: 'present' },
+  { id: 'att_2', childId: 'child_1', date: '2026-05-11', checkIn: '08:22', checkOut: '17:05', status: 'present' },
+  { id: 'att_3', childId: 'child_1', date: '2026-05-10', checkIn: '08:45', checkOut: '17:00', status: 'late', notes: 'Doctor appointment in morning' },
+  { id: 'att_4', childId: 'child_1', date: '2026-05-09', checkIn: '08:10', checkOut: '15:00', status: 'early-pickup', notes: 'Family event' },
+  { id: 'att_5', childId: 'child_1', date: '2026-05-08', checkIn: '08:20', checkOut: '17:10', status: 'present' },
+  { id: 'att_6', childId: 'child_1', date: '2026-05-07', checkIn: undefined, checkOut: undefined, status: 'absent', notes: 'Sick - fever' },
+  { id: 'att_7', childId: 'child_1', date: '2026-05-06', checkIn: '08:05', checkOut: '17:00', status: 'present' },
+  { id: 'att_8', childId: 'child_1', date: '2026-05-05', checkIn: '08:18', checkOut: '17:15', status: 'present' },
+];
+
+export const MOCK_CONVERSATIONS: Conversation[] = [
+  {
+    id: 'conv_1',
+    participantId: 'teacher_1',
+    participantName: 'Ms. Patricia Williams',
+    participantRole: 'Lead Teacher - Sunshine Room',
+    participantAvatar: 'https://i.pravatar.cc/150?img=32',
+    lastMessage: "Emma did wonderfully in today's painting activity!",
+    lastMessageTime: '2026-05-12T14:30:00',
+    unreadCount: 2,
+    messages: [
+      {
+        id: 'msg_1',
+        senderId: 'teacher_1',
+        senderName: 'Ms. Patricia Williams',
+        content: 'Good morning! Just wanted to let you know Emma arrived safely and is having a great start to the day.',
+        timestamp: '2026-05-12T08:20:00',
+        isRead: true,
+      },
+      {
+        id: 'msg_2',
+        senderId: 'user_1',
+        senderName: 'Sarah Johnson',
+        content: 'Thank you so much! She was really excited about painting today.',
+        timestamp: '2026-05-12T09:15:00',
+        isRead: true,
+      },
+      {
+        id: 'msg_3',
+        senderId: 'teacher_1',
+        senderName: 'Ms. Patricia Williams',
+        content: "Emma did wonderfully in today's painting activity!",
+        timestamp: '2026-05-12T14:30:00',
+        isRead: false,
+      },
+      {
+        id: 'msg_4',
+        senderId: 'teacher_1',
+        senderName: 'Ms. Patricia Williams',
+        content: 'She made a beautiful butterfly - I\'ll send a photo in her daily report.',
+        timestamp: '2026-05-12T14:31:00',
+        isRead: false,
+      },
+    ],
+  },
+  {
+    id: 'conv_2',
+    participantId: 'admin_1',
+    participantName: 'Lisa Chen',
+    participantRole: 'Center Administrator',
+    participantAvatar: 'https://i.pravatar.cc/150?img=5',
+    lastMessage: 'Your June invoice is ready for review.',
+    lastMessageTime: '2026-05-10T11:00:00',
+    unreadCount: 1,
+    messages: [
+      {
+        id: 'msg_5',
+        senderId: 'admin_1',
+        senderName: 'Lisa Chen',
+        content: 'Your June invoice is ready for review.',
+        timestamp: '2026-05-10T11:00:00',
+        isRead: false,
+      },
+    ],
+  },
+];
+
+export const MOCK_INVOICES: Invoice[] = [
+  {
+    id: 'inv_1',
+    invoiceNumber: 'INV-2026-005',
+    period: 'May 2026',
+    dueDate: '2026-05-15',
+    issueDate: '2026-05-01',
+    status: 'pending',
+    items: [
+      { description: 'Full-time childcare (May 2026)', quantity: 1, unitPrice: 1200, total: 1200 },
+      { description: 'Extended care (after 5pm, 3 days)', quantity: 3, unitPrice: 25, total: 75 },
+      { description: 'Enrichment activities - Swimming', quantity: 4, unitPrice: 20, total: 80 },
+    ],
+    subtotal: 1355,
+    tax: 0,
+    total: 1355,
+  },
+  {
+    id: 'inv_2',
+    invoiceNumber: 'INV-2026-004',
+    period: 'April 2026',
+    dueDate: '2026-04-15',
+    issueDate: '2026-04-01',
+    status: 'paid',
+    paidDate: '2026-04-12',
+    items: [
+      { description: 'Full-time childcare (April 2026)', quantity: 1, unitPrice: 1200, total: 1200 },
+      { description: 'Enrichment activities - Art class', quantity: 4, unitPrice: 15, total: 60 },
+    ],
+    subtotal: 1260,
+    tax: 0,
+    total: 1260,
+  },
+  {
+    id: 'inv_3',
+    invoiceNumber: 'INV-2026-003',
+    period: 'March 2026',
+    dueDate: '2026-03-15',
+    issueDate: '2026-03-01',
+    status: 'paid',
+    paidDate: '2026-03-10',
+    items: [
+      { description: 'Full-time childcare (March 2026)', quantity: 1, unitPrice: 1200, total: 1200 },
+    ],
+    subtotal: 1200,
+    tax: 0,
+    total: 1200,
+  },
+];
+
+export const MOCK_GALLERY: GalleryPhoto[] = [
+  { id: 'ph_1', childId: 'child_1', url: 'https://picsum.photos/600/400?random=10', thumbnail: 'https://picsum.photos/200/200?random=10', caption: 'Painting butterflies', date: '2026-05-12', uploadedBy: 'Ms. Patricia Williams', tags: ['art', 'painting'] },
+  { id: 'ph_2', childId: 'child_1', url: 'https://picsum.photos/600/400?random=11', thumbnail: 'https://picsum.photos/200/200?random=11', caption: 'Outdoor playtime', date: '2026-05-12', uploadedBy: 'Ms. Patricia Williams', tags: ['outdoor', 'play'] },
+  { id: 'ph_3', childId: 'child_1', url: 'https://picsum.photos/600/400?random=12', thumbnail: 'https://picsum.photos/200/200?random=12', caption: 'Story time fun', date: '2026-05-11', uploadedBy: 'Ms. Patricia Williams', tags: ['reading', 'group'] },
+  { id: 'ph_4', childId: 'child_1', url: 'https://picsum.photos/600/400?random=13', thumbnail: 'https://picsum.photos/200/200?random=13', caption: 'Planting seeds science project', date: '2026-05-11', uploadedBy: 'Ms. Patricia Williams', tags: ['science', 'nature'] },
+  { id: 'ph_5', childId: 'child_1', url: 'https://picsum.photos/600/400?random=14', thumbnail: 'https://picsum.photos/200/200?random=14', caption: 'Block building', date: '2026-05-10', uploadedBy: 'Ms. Patricia Williams', tags: ['building', 'play'] },
+  { id: 'ph_6', childId: 'child_1', url: 'https://picsum.photos/600/400?random=15', thumbnail: 'https://picsum.photos/200/200?random=15', caption: 'Dance class performance', date: '2026-05-09', uploadedBy: 'Ms. Patricia Williams', tags: ['dance', 'music'] },
+  { id: 'ph_7', childId: 'child_1', url: 'https://picsum.photos/600/400?random=16', thumbnail: 'https://picsum.photos/200/200?random=16', caption: 'Lunch time', date: '2026-05-08', uploadedBy: 'Ms. Patricia Williams', tags: ['lunch', 'social'] },
+  { id: 'ph_8', childId: 'child_1', url: 'https://picsum.photos/600/400?random=17', thumbnail: 'https://picsum.photos/200/200?random=17', caption: 'Morning circle time', date: '2026-05-07', uploadedBy: 'Ms. Patricia Williams', tags: ['group', 'learning'] },
+];
+
+export const MOCK_NOTIFICATIONS: Notification[] = [
+  { id: 'notif_1', type: 'report', title: "Emma's Daily Report Ready", body: "Today's daily report for Emma is now available.", timestamp: '2026-05-12T17:00:00', isRead: false },
+  { id: 'notif_2', type: 'message', title: 'New message from Ms. Williams', body: 'Emma did wonderfully in today\'s painting activity!', timestamp: '2026-05-12T14:30:00', isRead: false },
+  { id: 'notif_3', type: 'billing', title: 'Invoice Due Soon', body: 'Your May invoice of $1,355 is due on May 15.', timestamp: '2026-05-10T09:00:00', isRead: true },
+  { id: 'notif_4', type: 'event', title: 'Upcoming Event: Mother\'s Day Celebration', body: 'Join us on May 10th for a special Mother\'s Day tea party!', timestamp: '2026-05-08T10:00:00', isRead: true },
+  { id: 'notif_5', type: 'attendance', title: 'Check-in Confirmed', body: 'Emma has been checked in at 8:15 AM today.', timestamp: '2026-05-12T08:15:00', isRead: true },
+];
+
+export const MOCK_EVENTS: Event[] = [
+  {
+    id: 'event_1',
+    title: "Spring Performance",
+    description: "Children will perform songs and dances they've been practicing. Parents are warmly invited!",
+    date: '2026-05-20',
+    startTime: '10:00',
+    endTime: '11:30',
+    location: 'Main Hall',
+    type: 'performance',
+  },
+  {
+    id: 'event_2',
+    title: 'Field Trip - City Park',
+    description: 'An exciting trip to the botanical garden in City Park. Dress comfortably and bring sunscreen.',
+    date: '2026-05-22',
+    startTime: '09:00',
+    endTime: '14:00',
+    location: 'City Park Botanical Garden',
+    type: 'field-trip',
+  },
+  {
+    id: 'event_3',
+    title: 'Parent-Teacher Meeting',
+    description: 'Quarterly progress discussion for Sunshine Room families.',
+    date: '2026-05-28',
+    startTime: '18:00',
+    endTime: '19:30',
+    location: 'Conference Room B',
+    type: 'meeting',
+  },
+  {
+    id: 'event_4',
+    title: 'Memorial Day - Center Closed',
+    description: 'The center will be closed in observance of Memorial Day.',
+    date: '2026-05-26',
+    startTime: '00:00',
+    endTime: '23:59',
+    location: '',
+    type: 'holiday',
+  },
+];
