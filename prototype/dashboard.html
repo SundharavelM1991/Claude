@@ -1,0 +1,1199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Parent Dashboard — Childcare App</title>
+  <link rel="stylesheet" href="design-system.css" />
+  <style>
+
+    /* ── Device Shell ─────────────────────────────────────────── */
+    .device-shell {
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 40px 20px;
+      background: linear-gradient(135deg, #94A3B8 0%, #64748B 100%);
+    }
+
+    .device {
+      width: 390px;
+      min-height: 844px;
+      background: var(--color-background);
+      border-radius: 52px;
+      box-shadow: 0 32px 80px rgba(0,0,0,0.35), 0 0 0 2px rgba(255,255,255,0.15) inset;
+      overflow: hidden;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ── Status Bar ───────────────────────────────────────────── */
+    .status-bar {
+      height: 50px;
+      background: var(--color-primary-darker);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 28px 0 24px;
+      flex-shrink: 0;
+    }
+    .status-bar .time {
+      font-size: 15px;
+      font-weight: var(--weight-semibold);
+      color: #fff;
+      letter-spacing: 0.01em;
+    }
+    .status-icons {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .status-icons svg { color: #fff; }
+
+    /* ── Scrollable Content ───────────────────────────────────── */
+    .screen-content {
+      flex: 1;
+      overflow-y: auto;
+      overflow-x: hidden;
+      scrollbar-width: none;
+    }
+    .screen-content::-webkit-scrollbar { display: none; }
+
+    /* ── Header / Hero ────────────────────────────────────────── */
+    .header {
+      background: linear-gradient(160deg, var(--color-primary-darker) 0%, var(--color-primary) 100%);
+      padding: 20px 20px 28px;
+      position: relative;
+      overflow: hidden;
+    }
+    .header::before {
+      content: '';
+      position: absolute;
+      top: -40px; right: -40px;
+      width: 180px; height: 180px;
+      background: rgba(255,255,255,0.06);
+      border-radius: 50%;
+    }
+    .header::after {
+      content: '';
+      position: absolute;
+      bottom: -30px; left: 30px;
+      width: 120px; height: 120px;
+      background: rgba(255,255,255,0.04);
+      border-radius: 50%;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 6px;
+    }
+    .greeting-label {
+      font-size: var(--text-caption);
+      font-weight: var(--weight-medium);
+      color: rgba(255,255,255,0.7);
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+    .greeting-name {
+      font-size: var(--text-display);
+      font-weight: var(--weight-bold);
+      color: #fff;
+      margin-top: 2px;
+      line-height: 1.2;
+    }
+    .header-actions {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+    .icon-btn {
+      width: 40px; height: 40px;
+      background: rgba(255,255,255,0.15);
+      border-radius: var(--radius-full);
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer;
+      position: relative;
+      border: none;
+      transition: background var(--transition-fast);
+    }
+    .icon-btn:active { background: rgba(255,255,255,0.25); }
+    .notif-dot {
+      position: absolute;
+      top: 7px; right: 7px;
+      width: 8px; height: 8px;
+      background: #F87171;
+      border-radius: 50%;
+      border: 1.5px solid var(--color-primary-darker);
+    }
+
+    /* ── Main Content Body ────────────────────────────────────── */
+    .content-body {
+      padding: 16px 16px 100px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      background: var(--color-background);
+    }
+
+    /* ── Section Header ───────────────────────────────────────── */
+    .section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+    .section-title {
+      font-size: var(--text-h3);
+      font-weight: var(--weight-bold);
+      color: var(--color-text-primary);
+    }
+    .see-all {
+      font-size: var(--text-body-sm);
+      font-weight: var(--weight-semibold);
+      color: var(--color-primary);
+      cursor: pointer;
+      background: none;
+      border: none;
+      padding: 0;
+    }
+
+    /* ── Card Base ────────────────────────────────────────────── */
+    .card {
+      background: var(--color-surface);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow-card);
+      overflow: hidden;
+    }
+
+    /* ─────────────────────────────────────────────────────────── */
+    /* SECTION 1: MY CHILDREN                                      */
+    /* ─────────────────────────────────────────────────────────── */
+    .children-scroll {
+      display: flex;
+      gap: 12px;
+      overflow-x: auto;
+      padding-bottom: 4px;
+      scrollbar-width: none;
+    }
+    .children-scroll::-webkit-scrollbar { display: none; }
+
+    .child-card {
+      background: var(--color-surface);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow-card);
+      padding: 16px;
+      min-width: 160px;
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      position: relative;
+      border: 1.5px solid var(--color-border-light);
+      transition: transform var(--transition-spring), box-shadow var(--transition-normal);
+      cursor: pointer;
+    }
+    .child-card:active {
+      transform: scale(0.97);
+    }
+    .child-card.checked-in {
+      border-color: rgba(16,185,129,0.25);
+      background: linear-gradient(160deg, #fff 60%, var(--color-success-surface) 100%);
+    }
+    .child-card.checked-out {
+      border-color: var(--color-border);
+    }
+
+    .avatar-ring {
+      position: relative;
+      width: 68px; height: 68px;
+    }
+    .avatar-ring svg.ring {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+    }
+    .avatar-ring svg.ring circle.track {
+      fill: none;
+      stroke: var(--color-border);
+      stroke-width: 3;
+    }
+    .avatar-ring svg.ring circle.progress {
+      fill: none;
+      stroke: var(--color-success);
+      stroke-width: 3;
+      stroke-dasharray: 188;
+      stroke-dashoffset: 0;
+      stroke-linecap: round;
+      transform: rotate(-90deg);
+      transform-origin: 50% 50%;
+    }
+    .avatar-ring svg.ring circle.progress.inactive {
+      stroke: var(--color-border);
+    }
+    .avatar-img {
+      position: absolute;
+      top: 5px; left: 5px;
+      width: 58px; height: 58px;
+      border-radius: 50%;
+      object-fit: cover;
+      background: var(--color-primary-surface);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 22px;
+      overflow: hidden;
+    }
+    .avatar-initials {
+      width: 58px; height: 58px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 20px;
+      font-weight: var(--weight-bold);
+      color: #fff;
+      position: absolute;
+      top: 5px; left: 5px;
+    }
+    .avatar-initials.teal   { background: linear-gradient(135deg, #0A7EA4, #065E7C); }
+    .avatar-initials.purple { background: linear-gradient(135deg, #8B5CF6, #6D28D9); }
+    .avatar-initials.orange { background: linear-gradient(135deg, #F97316, #EA580C); }
+
+    .status-dot {
+      position: absolute;
+      bottom: 3px; right: 3px;
+      width: 16px; height: 16px;
+      border-radius: 50%;
+      border: 2.5px solid #fff;
+      z-index: 2;
+    }
+    .status-dot.in  { background: var(--color-success); }
+    .status-dot.out { background: var(--color-text-tertiary); }
+
+    .child-name {
+      font-size: var(--text-body-sm);
+      font-weight: var(--weight-bold);
+      color: var(--color-text-primary);
+      text-align: center;
+    }
+    .child-meta {
+      font-size: 11px;
+      color: var(--color-text-tertiary);
+      text-align: center;
+      line-height: 1.4;
+    }
+    .child-status-row {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .child-status-time {
+      font-size: 11px;
+      font-weight: var(--weight-semibold);
+      color: var(--color-success-dark);
+    }
+    .child-status-time.out {
+      color: var(--color-text-tertiary);
+    }
+
+    /* ─────────────────────────────────────────────────────────── */
+    /* SECTION 2: QUICK ACTIONS                                    */
+    /* ─────────────────────────────────────────────────────────── */
+    .quick-actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    .action-btn {
+      background: var(--color-surface);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow-card);
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 10px;
+      cursor: pointer;
+      border: none;
+      transition: transform var(--transition-spring), box-shadow var(--transition-normal);
+      text-align: left;
+      border: 1.5px solid var(--color-border-light);
+    }
+    .action-btn:active {
+      transform: scale(0.96);
+      box-shadow: var(--shadow-sm);
+    }
+    .action-btn.primary-action {
+      background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
+      border-color: transparent;
+      box-shadow: var(--shadow-primary);
+    }
+    .action-icon {
+      width: 44px; height: 44px;
+      border-radius: var(--radius-md);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .action-icon.teal-light  { background: var(--color-primary-surface); }
+    .action-icon.white-glass { background: rgba(255,255,255,0.2); }
+    .action-icon.amber-light { background: var(--color-warning-surface); }
+
+    .action-label {
+      font-size: var(--text-body-sm);
+      font-weight: var(--weight-bold);
+      color: var(--color-text-primary);
+      line-height: 1.3;
+    }
+    .action-btn.primary-action .action-label {
+      color: #fff;
+    }
+    .action-sublabel {
+      font-size: 11px;
+      color: var(--color-text-tertiary);
+      margin-top: 1px;
+    }
+    .action-btn.primary-action .action-sublabel {
+      color: rgba(255,255,255,0.7);
+    }
+
+    /* ─────────────────────────────────────────────────────────── */
+    /* ALERT CARD (Incident / Forms / Message)                     */
+    /* ─────────────────────────────────────────────────────────── */
+    .alert-card {
+      background: var(--color-surface);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow-card);
+      overflow: hidden;
+      border: 1.5px solid var(--color-border-light);
+    }
+    .alert-card-inner {
+      padding: 14px 16px;
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+    }
+    .alert-icon-wrap {
+      width: 42px; height: 42px;
+      border-radius: var(--radius-md);
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .alert-icon-wrap.danger  { background: var(--color-danger-surface); }
+    .alert-icon-wrap.warning { background: var(--color-warning-surface); }
+    .alert-icon-wrap.info    { background: var(--color-info-surface); }
+    .alert-icon-wrap.message { background: var(--color-primary-surface); }
+
+    .alert-content { flex: 1; min-width: 0; }
+    .alert-tag {
+      font-size: 10px;
+      font-weight: var(--weight-bold);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      margin-bottom: 3px;
+    }
+    .alert-tag.danger  { color: var(--color-danger); }
+    .alert-tag.warning { color: var(--color-warning-dark); }
+    .alert-tag.info    { color: var(--color-info); }
+    .alert-tag.message { color: var(--color-primary); }
+
+    .alert-title {
+      font-size: var(--text-body-sm);
+      font-weight: var(--weight-semibold);
+      color: var(--color-text-primary);
+      line-height: 1.35;
+    }
+    .alert-desc {
+      font-size: 12px;
+      color: var(--color-text-secondary);
+      margin-top: 3px;
+      line-height: 1.4;
+    }
+    .alert-meta {
+      font-size: 11px;
+      color: var(--color-text-tertiary);
+      margin-top: 4px;
+    }
+    .alert-cta {
+      margin-top: 10px;
+      display: flex;
+      gap: 8px;
+    }
+    .btn-sm {
+      padding: 7px 14px;
+      border-radius: var(--radius-full);
+      font-size: 12px;
+      font-weight: var(--weight-semibold);
+      cursor: pointer;
+      border: none;
+      transition: opacity var(--transition-fast), transform var(--transition-spring);
+    }
+    .btn-sm:active { opacity: 0.8; transform: scale(0.96); }
+    .btn-primary { background: var(--color-primary); color: #fff; }
+    .btn-ghost   {
+      background: transparent;
+      color: var(--color-text-secondary);
+      border: 1.5px solid var(--color-border);
+    }
+    .btn-danger  { background: var(--color-danger); color: #fff; }
+
+    .alert-left-bar {
+      width: 4px;
+      align-self: stretch;
+      border-radius: 0 4px 4px 0;
+      flex-shrink: 0;
+    }
+    .alert-left-bar.danger  { background: var(--color-danger); }
+    .alert-left-bar.warning { background: var(--color-warning); }
+    .alert-left-bar.info    { background: var(--color-info); }
+    .alert-left-bar.message { background: var(--color-primary); }
+
+    /* ─────────────────────────────────────────────────────────── */
+    /* REMINDER SECTION                                            */
+    /* ─────────────────────────────────────────────────────────── */
+    .reminder-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1px;
+      background: var(--color-surface);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow-card);
+      overflow: hidden;
+      border: 1.5px solid var(--color-border-light);
+    }
+    .reminder-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 13px 16px;
+      background: var(--color-surface);
+      transition: background var(--transition-fast);
+      cursor: pointer;
+    }
+    .reminder-item:not(:last-child) {
+      border-bottom: 1px solid var(--color-border-light);
+    }
+    .reminder-item:active { background: var(--color-surface-subtle); }
+    .reminder-icon-wrap {
+      width: 38px; height: 38px;
+      border-radius: var(--radius-md);
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .reminder-text { flex: 1; min-width: 0; }
+    .reminder-title {
+      font-size: var(--text-body-sm);
+      font-weight: var(--weight-semibold);
+      color: var(--color-text-primary);
+    }
+    .reminder-sub {
+      font-size: 11px;
+      color: var(--color-text-tertiary);
+      margin-top: 2px;
+    }
+    .reminder-arrow {
+      color: var(--color-text-tertiary);
+      flex-shrink: 0;
+    }
+
+    /* ─────────────────────────────────────────────────────────── */
+    /* ACTIVITY FEED                                               */
+    /* ─────────────────────────────────────────────────────────── */
+    .feed-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .feed-card {
+      background: var(--color-surface);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow-card);
+      overflow: hidden;
+      border: 1.5px solid var(--color-border-light);
+      transition: transform var(--transition-spring);
+      cursor: pointer;
+    }
+    .feed-card:active { transform: scale(0.98); }
+
+    .feed-card-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 14px 10px;
+    }
+    .feed-type-icon {
+      width: 36px; height: 36px;
+      border-radius: var(--radius-md);
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      font-size: 17px;
+    }
+    .feed-header-text { flex: 1; }
+    .feed-type-label {
+      font-size: 10px;
+      font-weight: var(--weight-bold);
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+    .feed-child-name {
+      font-size: 12px;
+      color: var(--color-text-tertiary);
+      margin-top: 1px;
+    }
+    .feed-time {
+      font-size: 11px;
+      color: var(--color-text-tertiary);
+      font-weight: var(--weight-medium);
+      flex-shrink: 0;
+    }
+
+    .feed-card-body {
+      padding: 0 14px 12px;
+    }
+    .feed-text {
+      font-size: var(--text-body-sm);
+      color: var(--color-text-secondary);
+      line-height: 1.5;
+    }
+    .feed-photo-strip {
+      display: flex;
+      gap: 6px;
+      padding: 6px 14px 12px;
+    }
+    .feed-photo {
+      width: 80px; height: 80px;
+      border-radius: var(--radius-md);
+      background: var(--color-surface-subtle);
+      object-fit: cover;
+      flex-shrink: 0;
+      overflow: hidden;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 28px;
+    }
+    .feed-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      padding: 0 14px 12px;
+    }
+    .feed-pill {
+      padding: 4px 12px;
+      border-radius: var(--radius-full);
+      font-size: 12px;
+      font-weight: var(--weight-medium);
+      background: var(--color-surface-subtle);
+      color: var(--color-text-secondary);
+      display: flex; align-items: center; gap: 4px;
+    }
+    .feed-divider {
+      height: 1px;
+      background: var(--color-border-light);
+      margin: 0 14px;
+    }
+    .feed-footer {
+      padding: 9px 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .feed-teacher {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      color: var(--color-text-tertiary);
+    }
+    .teacher-dot {
+      width: 22px; height: 22px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #8B5CF6, #6D28D9);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 9px;
+      font-weight: var(--weight-bold);
+      color: #fff;
+    }
+
+    /* ─────────────────────────────────────────────────────────── */
+    /* BOTTOM NAV                                                  */
+    /* ─────────────────────────────────────────────────────────── */
+    .bottom-nav {
+      position: sticky;
+      bottom: 0;
+      background: var(--color-surface);
+      border-top: 1px solid var(--color-border-light);
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+      padding: 8px 0 20px;
+      box-shadow: 0 -4px 20px rgba(15,23,42,0.07);
+      flex-shrink: 0;
+      z-index: 10;
+    }
+    .nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      cursor: pointer;
+      padding: 4px 10px;
+      border-radius: var(--radius-lg);
+      transition: background var(--transition-fast);
+    }
+    .nav-item:active { background: var(--color-surface-subtle); }
+    .nav-label {
+      font-size: 10px;
+      font-weight: var(--weight-semibold);
+      color: var(--color-tab-inactive);
+    }
+    .nav-item.active .nav-label { color: var(--color-tab-active); }
+    .nav-icon-wrap {
+      width: 28px; height: 28px;
+      display: flex; align-items: center; justify-content: center;
+      position: relative;
+    }
+    .nav-badge {
+      position: absolute;
+      top: -3px; right: -4px;
+      width: 14px; height: 14px;
+      background: var(--color-danger);
+      border-radius: 50%;
+      border: 2px solid #fff;
+      font-size: 8px;
+      font-weight: var(--weight-bold);
+      color: #fff;
+      display: flex; align-items: center; justify-content: center;
+    }
+
+    /* ─────────────────────────────────────────────────────────── */
+    /* ACTIVITY TYPE COLORS                                        */
+    /* ─────────────────────────────────────────────────────────── */
+    .type-notes    { background: var(--activity-notes-bg);    color: var(--activity-notes); }
+    .type-food     { background: var(--activity-food-bg);     color: var(--activity-food); }
+    .type-diaper   { background: var(--activity-diaper-bg);   color: var(--activity-diaper); }
+    .type-nap      { background: var(--activity-nap-bg);      color: var(--activity-nap); }
+    .type-incident { background: var(--activity-incident-bg); color: var(--activity-incident); }
+    .type-homework { background: var(--activity-homework-bg); color: var(--activity-homework); }
+    .type-health   { background: var(--activity-health-bg);   color: var(--activity-health); }
+    .type-photo    { background: var(--activity-photo-bg);    color: var(--activity-photo); }
+    .type-medicine { background: var(--activity-medicine-bg); color: var(--activity-medicine); }
+    .type-bottle   { background: var(--activity-bottle-bg);   color: var(--activity-bottle); }
+
+    /* ─────────────────────────────────────────────────────────── */
+    /* LOAD MORE                                                   */
+    /* ─────────────────────────────────────────────────────────── */
+    .load-more {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 14px;
+      background: var(--color-surface);
+      border-radius: var(--radius-xl);
+      border: 1.5px dashed var(--color-border);
+      font-size: var(--text-body-sm);
+      font-weight: var(--weight-semibold);
+      color: var(--color-primary);
+      cursor: pointer;
+    }
+
+  </style>
+</head>
+<body>
+<div class="device-shell">
+  <div class="device">
+
+    <!-- Status Bar -->
+    <div class="status-bar">
+      <span class="time">9:41</span>
+      <div class="status-icons">
+        <!-- Signal -->
+        <svg width="17" height="12" viewBox="0 0 17 12" fill="none">
+          <rect x="0" y="7" width="3" height="5" rx="1" fill="white"/>
+          <rect x="4.5" y="4.5" width="3" height="7.5" rx="1" fill="white"/>
+          <rect x="9" y="2" width="3" height="10" rx="1" fill="white"/>
+          <rect x="13.5" y="0" width="3" height="12" rx="1" fill="white"/>
+        </svg>
+        <!-- WiFi -->
+        <svg width="16" height="12" viewBox="0 0 16 12" fill="none">
+          <path d="M8 9.5a1.5 1.5 0 100 3 1.5 1.5 0 000-3z" fill="white"/>
+          <path d="M3.5 6.5C4.8 5.2 6.3 4.5 8 4.5s3.2.7 4.5 2" stroke="white" stroke-width="1.5" stroke-linecap="round" fill="none"/>
+          <path d="M1 4C3 2 5.4 1 8 1s5 1 7 3" stroke="white" stroke-width="1.5" stroke-linecap="round" fill="none" opacity="0.5"/>
+        </svg>
+        <!-- Battery -->
+        <svg width="25" height="12" viewBox="0 0 25 12" fill="none">
+          <rect x="0.5" y="0.5" width="21" height="11" rx="3" stroke="white" stroke-opacity="0.4"/>
+          <rect x="2" y="2" width="16" height="8" rx="1.5" fill="white"/>
+          <path d="M23 4v4a2 2 0 000-4z" fill="white" fill-opacity="0.4"/>
+        </svg>
+      </div>
+    </div>
+
+    <!-- Scrollable Screen -->
+    <div class="screen-content">
+
+      <!-- HEADER -->
+      <div class="header">
+        <div class="header-top">
+          <div>
+            <div class="greeting-label">Good Morning</div>
+            <div class="greeting-name">Sarah Johnson 👋</div>
+          </div>
+          <div class="header-actions">
+            <button class="icon-btn" aria-label="Messages">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/>
+              </svg>
+            </button>
+            <button class="icon-btn" aria-label="Notifications">
+              <div class="notif-dot"></div>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 01-3.46 0"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- MAIN CONTENT -->
+      <div class="content-body">
+
+        <!-- ── 1. MY CHILDREN ─────────────────────────────────── -->
+        <div>
+          <div class="section-header">
+            <span class="section-title">My Children</span>
+            <button class="see-all">Manage</button>
+          </div>
+          <div class="children-scroll">
+
+            <!-- Child 1 — Checked In -->
+            <div class="child-card checked-in">
+              <div class="avatar-ring">
+                <svg class="ring" viewBox="0 0 68 68">
+                  <circle class="track" cx="34" cy="34" r="30"/>
+                  <circle class="progress" cx="34" cy="34" r="30"/>
+                </svg>
+                <div class="avatar-initials teal">E</div>
+                <div class="status-dot in"></div>
+              </div>
+              <div>
+                <div class="child-name">Emma</div>
+                <div class="child-meta">Sunshine Room<br/>Ms. Rachel</div>
+              </div>
+              <div class="child-status-row">
+                <svg width="11" height="11" viewBox="0 0 24 24" fill="var(--color-success)" stroke="none">
+                  <circle cx="12" cy="12" r="12"/>
+                </svg>
+                <span class="child-status-time">In · 8:22 AM</span>
+              </div>
+            </div>
+
+            <!-- Child 2 — Checked In -->
+            <div class="child-card checked-in">
+              <div class="avatar-ring">
+                <svg class="ring" viewBox="0 0 68 68">
+                  <circle class="track" cx="34" cy="34" r="30"/>
+                  <circle class="progress" cx="34" cy="34" r="30" stroke-dashoffset="47"/>
+                </svg>
+                <div class="avatar-initials purple">L</div>
+                <div class="status-dot in"></div>
+              </div>
+              <div>
+                <div class="child-name">Liam</div>
+                <div class="child-meta">Rainbow Room<br/>Ms. Claire</div>
+              </div>
+              <div class="child-status-row">
+                <svg width="11" height="11" viewBox="0 0 24 24" fill="var(--color-success)" stroke="none">
+                  <circle cx="12" cy="12" r="12"/>
+                </svg>
+                <span class="child-status-time">In · 8:35 AM</span>
+              </div>
+            </div>
+
+            <!-- Child 3 — Not Checked In -->
+            <div class="child-card checked-out">
+              <div class="avatar-ring">
+                <svg class="ring" viewBox="0 0 68 68">
+                  <circle class="track" cx="34" cy="34" r="30"/>
+                  <circle class="progress inactive" cx="34" cy="34" r="30"/>
+                </svg>
+                <div class="avatar-initials orange">O</div>
+                <div class="status-dot out"></div>
+              </div>
+              <div>
+                <div class="child-name">Olivia</div>
+                <div class="child-meta">Stars Room<br/>Ms. Amy</div>
+              </div>
+              <div class="child-status-row">
+                <svg width="11" height="11" viewBox="0 0 24 24" fill="var(--color-text-tertiary)" stroke="none">
+                  <circle cx="12" cy="12" r="12"/>
+                </svg>
+                <span class="child-status-time out">Not Checked In</span>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- ── 2. QUICK ACTIONS ───────────────────────────────── -->
+        <div>
+          <div class="section-header">
+            <span class="section-title">Quick Actions</span>
+          </div>
+          <div class="quick-actions">
+
+            <!-- Scan QR — Primary -->
+            <button class="action-btn primary-action">
+              <div class="action-icon white-glass">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/>
+                  <rect x="3" y="14" width="7" height="7" rx="1"/>
+                  <path d="M14 14h1v1h-1zM17 14h3M14 17v3M17 17h1v1h-1zM20 17v3M20 20h-3"/>
+                </svg>
+              </div>
+              <div>
+                <div class="action-label">Scan QR Code</div>
+                <div class="action-sublabel">Sign in / Sign out</div>
+              </div>
+            </button>
+
+            <!-- Mark Absence -->
+            <button class="action-btn">
+              <div class="action-icon amber-light">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--color-warning-dark)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="3" y="4" width="18" height="18" rx="2"/>
+                  <line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/>
+                  <line x1="3" y1="10" x2="21" y2="10"/>
+                  <line x1="9" y1="15" x2="15" y2="15"/>
+                </svg>
+              </div>
+              <div>
+                <div class="action-label">Mark Absence</div>
+                <div class="action-sublabel" style="color:var(--color-text-tertiary)">Report child absent</div>
+              </div>
+            </button>
+
+          </div>
+        </div>
+
+        <!-- ── 3. INCIDENT TO ACKNOWLEDGE ────────────────────── -->
+        <div>
+          <div class="section-header">
+            <span class="section-title">Incident Report</span>
+            <span class="badge badge-danger">1 Pending</span>
+          </div>
+          <div class="alert-card">
+            <div style="display:flex;">
+              <div class="alert-left-bar danger"></div>
+              <div class="alert-card-inner" style="flex:1;">
+                <div class="alert-icon-wrap danger">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--color-danger)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/>
+                    <line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>
+                  </svg>
+                </div>
+                <div class="alert-content">
+                  <div class="alert-tag danger">Incident Report</div>
+                  <div class="alert-title">Emma got a minor scrape on her knee</div>
+                  <div class="alert-desc">While playing on the playground, Emma tripped and got a small scrape. First aid was applied by staff.</div>
+                  <div class="alert-meta">Today, 10:15 AM · Sunshine Room</div>
+                  <div class="alert-cta">
+                    <button class="btn-sm btn-primary">Acknowledge</button>
+                    <button class="btn-sm btn-ghost">Message Staff</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── 4. FORMS TO COMPLETE ───────────────────────────── -->
+        <div>
+          <div class="section-header">
+            <span class="section-title">Forms</span>
+            <span class="badge badge-info">2 Pending</span>
+          </div>
+          <div class="alert-card">
+            <div style="display:flex;">
+              <div class="alert-left-bar info"></div>
+              <div class="alert-card-inner" style="flex:1;">
+                <div class="alert-icon-wrap info">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--color-info)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
+                    <polyline points="14 2 14 8 20 8"/>
+                    <line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/>
+                    <polyline points="10 9 9 9 8 9"/>
+                  </svg>
+                </div>
+                <div class="alert-content">
+                  <div class="alert-tag info">E-Signature Required</div>
+                  <div class="alert-title">Annual Health & Emergency Form</div>
+                  <div class="alert-desc">Please review and sign the annual health update form for Emma. Due by May 20.</div>
+                  <div class="alert-meta">Assigned by Sunshine Room · 2 days ago</div>
+                  <div class="alert-cta">
+                    <button class="btn-sm btn-primary" style="background:var(--color-info)">Review & Sign</button>
+                    <button class="btn-sm btn-ghost">View All Forms</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── 5. REMINDERS ───────────────────────────────────── -->
+        <div>
+          <div class="section-header">
+            <span class="section-title">Reminders</span>
+            <span class="badge badge-warning">3 Items</span>
+          </div>
+          <div class="reminder-list">
+
+            <!-- Bring In -->
+            <div class="reminder-item">
+              <div class="reminder-icon-wrap" style="background:var(--color-warning-surface);">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--color-warning-dark)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/>
+                  <line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/>
+                </svg>
+              </div>
+              <div class="reminder-text">
+                <div class="reminder-title">Bring diapers for Emma</div>
+                <div class="reminder-sub">Requested by Ms. Rachel · Today</div>
+              </div>
+              <svg class="reminder-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+            </div>
+
+            <!-- Immunization -->
+            <div class="reminder-item">
+              <div class="reminder-icon-wrap" style="background:var(--color-danger-surface);">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--color-danger)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+                </svg>
+              </div>
+              <div class="reminder-text">
+                <div class="reminder-title">Immunization due for Liam</div>
+                <div class="reminder-sub">MMR Vaccine · Due Jun 1, 2025</div>
+              </div>
+              <svg class="reminder-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+            </div>
+
+            <!-- Health Screening -->
+            <div class="reminder-item">
+              <div class="reminder-icon-wrap" style="background:var(--color-success-surface);">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--color-success-dark)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/>
+                </svg>
+              </div>
+              <div class="reminder-text">
+                <div class="reminder-title">Annual health screening pending</div>
+                <div class="reminder-sub">Olivia · Schedule before Jun 15</div>
+              </div>
+              <svg class="reminder-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- ── 6. MESSAGE NUDGE ───────────────────────────────── -->
+        <div>
+          <div class="alert-card">
+            <div style="display:flex;">
+              <div class="alert-left-bar message"></div>
+              <div class="alert-card-inner" style="flex:1; padding: 12px 14px;">
+                <div class="alert-icon-wrap message">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--color-primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/>
+                  </svg>
+                </div>
+                <div class="alert-content">
+                  <div class="alert-tag message">New Message</div>
+                  <div class="alert-title">Ms. Rachel sent you a message</div>
+                  <div class="alert-desc">"Emma had a wonderful morning during circle time. She was really engaged with..."</div>
+                  <div class="alert-meta">Sunshine Room · 5 min ago</div>
+                  <div class="alert-cta">
+                    <button class="btn-sm btn-primary">Reply</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── 7. ACTIVITY FEED ───────────────────────────────── -->
+        <div>
+          <div class="section-header">
+            <span class="section-title">Today's Activities</span>
+            <button class="see-all">See all</button>
+          </div>
+          <div class="feed-list">
+
+            <!-- Feed: Food -->
+            <div class="feed-card">
+              <div class="feed-card-header">
+                <div class="feed-type-icon type-food">🍽️</div>
+                <div class="feed-header-text">
+                  <div class="feed-type-label" style="color:var(--activity-food)">Meal Time</div>
+                  <div class="feed-child-name">Emma · Sunshine Room</div>
+                </div>
+                <span class="feed-time">11:30 AM</span>
+              </div>
+              <div class="feed-card-body">
+                <div class="feed-text">Emma finished her lunch — pasta with veggies. She ate really well today!</div>
+              </div>
+              <div class="feed-pills">
+                <span class="feed-pill">🥗 Ate Well</span>
+                <span class="feed-pill">💧 Drank Water</span>
+              </div>
+              <div class="feed-divider"></div>
+              <div class="feed-footer">
+                <div class="feed-teacher">
+                  <div class="teacher-dot">R</div>
+                  Ms. Rachel
+                </div>
+              </div>
+            </div>
+
+            <!-- Feed: Nap -->
+            <div class="feed-card">
+              <div class="feed-card-header">
+                <div class="feed-type-icon type-nap">😴</div>
+                <div class="feed-header-text">
+                  <div class="feed-type-label" style="color:var(--activity-nap)">Nap Time</div>
+                  <div class="feed-child-name">Liam · Rainbow Room</div>
+                </div>
+                <span class="feed-time">1:05 PM</span>
+              </div>
+              <div class="feed-card-body">
+                <div class="feed-text">Liam napped well for 1 hour and 20 minutes. Woke up happy and refreshed!</div>
+              </div>
+              <div class="feed-pills">
+                <span class="feed-pill">⏱ 1h 20m</span>
+                <span class="feed-pill">😊 Woke happy</span>
+              </div>
+              <div class="feed-divider"></div>
+              <div class="feed-footer">
+                <div class="feed-teacher">
+                  <div class="teacher-dot" style="background: linear-gradient(135deg, #0A7EA4, #065E7C);">C</div>
+                  Ms. Claire
+                </div>
+              </div>
+            </div>
+
+            <!-- Feed: Notes with Photo -->
+            <div class="feed-card">
+              <div class="feed-card-header">
+                <div class="feed-type-icon type-notes">📝</div>
+                <div class="feed-header-text">
+                  <div class="feed-type-label" style="color:var(--activity-notes)">Daily Note</div>
+                  <div class="feed-child-name">Emma · Sunshine Room</div>
+                </div>
+                <span class="feed-time">9:45 AM</span>
+              </div>
+              <div class="feed-card-body">
+                <div class="feed-text">Emma did a fantastic finger-painting project today. She was so proud of her artwork!</div>
+              </div>
+              <div class="feed-photo-strip">
+                <div class="feed-photo">🎨</div>
+                <div class="feed-photo">🖼️</div>
+              </div>
+              <div class="feed-divider"></div>
+              <div class="feed-footer">
+                <div class="feed-teacher">
+                  <div class="teacher-dot">R</div>
+                  Ms. Rachel
+                </div>
+              </div>
+            </div>
+
+            <!-- Feed: Diaper -->
+            <div class="feed-card">
+              <div class="feed-card-header">
+                <div class="feed-type-icon type-diaper">🧷</div>
+                <div class="feed-header-text">
+                  <div class="feed-type-label" style="color:var(--activity-diaper)">Diaper Change</div>
+                  <div class="feed-child-name">Olivia · Stars Room</div>
+                </div>
+                <span class="feed-time">10:10 AM</span>
+              </div>
+              <div class="feed-pills">
+                <span class="feed-pill">💛 Wet</span>
+                <span class="feed-pill">✅ Clean & dry</span>
+              </div>
+              <div class="feed-divider"></div>
+              <div class="feed-footer">
+                <div class="feed-teacher">
+                  <div class="teacher-dot" style="background: linear-gradient(135deg, #F97316, #EA580C);">A</div>
+                  Ms. Amy
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Load More -->
+          <div class="load-more" style="margin-top:10px;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+            Load more activities
+          </div>
+        </div>
+
+      </div><!-- /content-body -->
+
+    </div><!-- /screen-content -->
+
+    <!-- BOTTOM NAV -->
+    <div class="bottom-nav">
+      <!-- Home (active) -->
+      <div class="nav-item active">
+        <div class="nav-icon-wrap">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="var(--color-tab-active)" stroke="none">
+            <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
+          </svg>
+        </div>
+        <span class="nav-label" style="color:var(--color-tab-active)">Home</span>
+      </div>
+      <!-- Activities -->
+      <div class="nav-item">
+        <div class="nav-icon-wrap">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--color-tab-inactive)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
+            <polyline points="14 2 14 8 20 8"/>
+            <line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/>
+          </svg>
+        </div>
+        <span class="nav-label">Activities</span>
+      </div>
+      <!-- Messages -->
+      <div class="nav-item">
+        <div class="nav-icon-wrap">
+          <div class="nav-badge">2</div>
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--color-tab-inactive)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/>
+          </svg>
+        </div>
+        <span class="nav-label">Messages</span>
+      </div>
+      <!-- Gallery -->
+      <div class="nav-item">
+        <div class="nav-icon-wrap">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--color-tab-inactive)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="3" width="18" height="18" rx="2"/>
+            <circle cx="8.5" cy="8.5" r="1.5"/>
+            <polyline points="21 15 16 10 5 21"/>
+          </svg>
+        </div>
+        <span class="nav-label">Gallery</span>
+      </div>
+      <!-- Profile -->
+      <div class="nav-item">
+        <div class="nav-icon-wrap">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--color-tab-inactive)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/>
+            <circle cx="12" cy="7" r="4"/>
+          </svg>
+        </div>
+        <span class="nav-label">Profile</span>
+      </div>
+    </div>
+
+  </div><!-- /device -->
+</div><!-- /device-shell -->
+</body>
+</html>

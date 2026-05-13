@@ -1,0 +1,265 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+
+/* ═══════════════════════════════════════════════════════════════
+   CHILDCARE PARENT APP — DESIGN SYSTEM
+   Version : 1.0
+   Font    : Plus Jakarta Sans
+   Primary : Teal Blue #0A7EA4
+   Market  : US & Canada
+   ═══════════════════════════════════════════════════════════════ */
+
+:root {
+
+  /* ── Color — Primary (Teal Blue) ─────────────────────────────── */
+  --color-primary:          #0A7EA4;
+  --color-primary-dark:     #065E7C;
+  --color-primary-darker:   #044A61;
+  --color-primary-light:    #38A8C8;
+  --color-primary-lighter:  #7FCDE0;
+  --color-primary-surface:  #E6F4F9;
+  --color-primary-surface2: #CCE9F3;
+
+  /* ── Color — Success / Check-in ──────────────────────────────── */
+  --color-success:          #10B981;
+  --color-success-dark:     #059669;
+  --color-success-light:    #34D399;
+  --color-success-surface:  #ECFDF5;
+
+  /* ── Color — Warning / Reminders ────────────────────────────── */
+  --color-warning:          #F59E0B;
+  --color-warning-dark:     #D97706;
+  --color-warning-light:    #FCD34D;
+  --color-warning-surface:  #FFFBEB;
+
+  /* ── Color — Danger / Incidents ─────────────────────────────── */
+  --color-danger:           #EF4444;
+  --color-danger-dark:      #DC2626;
+  --color-danger-light:     #F87171;
+  --color-danger-surface:   #FEF2F2;
+
+  /* ── Color — Info / Forms & Messages ────────────────────────── */
+  --color-info:             #6366F1;
+  --color-info-dark:        #4F46E5;
+  --color-info-light:       #818CF8;
+  --color-info-surface:     #EEF2FF;
+
+  /* ── Color — Neutral Surfaces ───────────────────────────────── */
+  --color-background:       #F8FAFC;
+  --color-surface:          #FFFFFF;
+  --color-surface-elevated: #FFFFFF;
+  --color-surface-subtle:   #F1F5F9;
+
+  /* ── Color — Text ────────────────────────────────────────────── */
+  --color-text-primary:     #0F172A;
+  --color-text-secondary:   #475569;
+  --color-text-tertiary:    #94A3B8;
+  --color-text-disabled:    #CBD5E1;
+  --color-text-inverse:     #FFFFFF;
+  --color-text-link:        #0A7EA4;
+
+  /* ── Color — Borders ─────────────────────────────────────────── */
+  --color-border:           #E2E8F0;
+  --color-border-light:     #F1F5F9;
+  --color-divider:          #EDF2F7;
+
+  /* ── Color — Navigation ──────────────────────────────────────── */
+  --color-tab-bar:          #FFFFFF;
+  --color-tab-active:       #0A7EA4;
+  --color-tab-inactive:     #94A3B8;
+
+  /* ── Color — Overlays ────────────────────────────────────────── */
+  --color-overlay:          rgba(15, 23, 42, 0.5);
+  --color-overlay-light:    rgba(15, 23, 42, 0.15);
+
+  /* ── Activity Feed Type Colors ───────────────────────────────── */
+  --activity-notes:         #6366F1;
+  --activity-notes-bg:      #EEF2FF;
+  --activity-food:          #F59E0B;
+  --activity-food-bg:       #FFFBEB;
+  --activity-diaper:        #14B8A6;
+  --activity-diaper-bg:     #F0FDFA;
+  --activity-nap:           #8B5CF6;
+  --activity-nap-bg:        #F5F3FF;
+  --activity-incident:      #EF4444;
+  --activity-incident-bg:   #FEF2F2;
+  --activity-homework:      #3B82F6;
+  --activity-homework-bg:   #EFF6FF;
+  --activity-health:        #10B981;
+  --activity-health-bg:     #ECFDF5;
+  --activity-photo:         #EC4899;
+  --activity-photo-bg:      #FDF2F8;
+  --activity-medicine:      #F97316;
+  --activity-medicine-bg:   #FFF7ED;
+  --activity-absence:       #94A3B8;
+  --activity-absence-bg:    #F8FAFC;
+  --activity-bottle:        #06B6D4;
+  --activity-bottle-bg:     #ECFEFF;
+
+  /* ── Typography — Font Family ────────────────────────────────── */
+  --font-family:            'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+
+  /* ── Typography — Scale ──────────────────────────────────────── */
+  --text-display:           22px;
+  --text-h1:                20px;
+  --text-h2:                18px;
+  --text-h3:                16px;
+  --text-body:              15px;
+  --text-body-sm:           14px;
+  --text-caption:           12px;
+  --text-label:             11px;
+
+  /* ── Typography — Weight ─────────────────────────────────────── */
+  --weight-regular:         400;
+  --weight-medium:          500;
+  --weight-semibold:        600;
+  --weight-bold:            700;
+  --weight-extrabold:       800;
+
+  /* ── Typography — Line Height ────────────────────────────────── */
+  --leading-tight:          1.2;
+  --leading-snug:           1.35;
+  --leading-normal:         1.5;
+  --leading-relaxed:        1.625;
+
+  /* ── Spacing (4px base grid) ─────────────────────────────────── */
+  --space-1:    4px;
+  --space-2:    8px;
+  --space-3:    12px;
+  --space-4:    16px;
+  --space-5:    20px;
+  --space-6:    24px;
+  --space-8:    32px;
+  --space-10:   40px;
+  --space-12:   48px;
+  --space-16:   64px;
+
+  /* ── Border Radius ───────────────────────────────────────────── */
+  --radius-sm:    8px;
+  --radius-md:    12px;
+  --radius-lg:    16px;
+  --radius-xl:    20px;
+  --radius-2xl:   24px;
+  --radius-full:  9999px;
+
+  /* ── Shadows ─────────────────────────────────────────────────── */
+  --shadow-xs:  0 1px 2px rgba(15, 23, 42, 0.04);
+  --shadow-sm:  0 1px 4px rgba(15, 23, 42, 0.06), 0 1px 2px rgba(15, 23, 42, 0.04);
+  --shadow-md:  0 4px 12px rgba(15, 23, 42, 0.08), 0 2px 4px rgba(15, 23, 42, 0.04);
+  --shadow-lg:  0 8px 24px rgba(15, 23, 42, 0.10), 0 4px 8px rgba(15, 23, 42, 0.05);
+  --shadow-xl:  0 16px 40px rgba(15, 23, 42, 0.12), 0 6px 12px rgba(15, 23, 42, 0.06);
+  --shadow-primary: 0 8px 24px rgba(10, 126, 164, 0.28);
+  --shadow-card:    0 2px 12px rgba(15, 23, 42, 0.07);
+
+  /* ── Transitions ─────────────────────────────────────────────── */
+  --transition-fast:    150ms ease;
+  --transition-normal:  250ms ease;
+  --transition-slow:    400ms ease;
+  --transition-spring:  300ms cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  /* ── Mobile Viewport ─────────────────────────────────────────── */
+  --mobile-width:   390px;
+  --mobile-height:  844px;
+}
+
+
+/* ═══════════════════════════════════════════════════════════════
+   BASE RESET & GLOBAL
+   ═══════════════════════════════════════════════════════════════ */
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: var(--font-family);
+  font-size: var(--text-body);
+  color: var(--color-text-primary);
+  background: #CBD5E1;
+  line-height: var(--leading-normal);
+}
+
+
+/* ═══════════════════════════════════════════════════════════════
+   UTILITY CLASSES
+   ═══════════════════════════════════════════════════════════════ */
+
+/* Text */
+.text-display  { font-size: var(--text-display); font-weight: var(--weight-bold); line-height: var(--leading-tight); }
+.text-h1       { font-size: var(--text-h1); font-weight: var(--weight-bold); line-height: var(--leading-tight); }
+.text-h2       { font-size: var(--text-h2); font-weight: var(--weight-semibold); line-height: var(--leading-snug); }
+.text-h3       { font-size: var(--text-h3); font-weight: var(--weight-semibold); line-height: var(--leading-snug); }
+.text-body     { font-size: var(--text-body); font-weight: var(--weight-regular); line-height: var(--leading-normal); }
+.text-body-sm  { font-size: var(--text-body-sm); font-weight: var(--weight-regular); line-height: var(--leading-normal); }
+.text-caption  { font-size: var(--text-caption); font-weight: var(--weight-regular); line-height: var(--leading-normal); }
+.text-label    { font-size: var(--text-label); font-weight: var(--weight-semibold); line-height: var(--leading-tight); letter-spacing: 0.04em; text-transform: uppercase; }
+
+.text-primary    { color: var(--color-text-primary); }
+.text-secondary  { color: var(--color-text-secondary); }
+.text-tertiary   { color: var(--color-text-tertiary); }
+.text-inverse    { color: var(--color-text-inverse); }
+.text-teal       { color: var(--color-primary); }
+.text-success    { color: var(--color-success); }
+.text-warning    { color: var(--color-warning); }
+.text-danger     { color: var(--color-danger); }
+
+.font-medium    { font-weight: var(--weight-medium); }
+.font-semibold  { font-weight: var(--weight-semibold); }
+.font-bold      { font-weight: var(--weight-bold); }
+
+/* Layout */
+.flex           { display: flex; }
+.flex-col       { display: flex; flex-direction: column; }
+.items-center   { align-items: center; }
+.items-start    { align-items: flex-start; }
+.justify-between{ justify-content: space-between; }
+.justify-center { justify-content: center; }
+.gap-1          { gap: var(--space-1); }
+.gap-2          { gap: var(--space-2); }
+.gap-3          { gap: var(--space-3); }
+.gap-4          { gap: var(--space-4); }
+.gap-6          { gap: var(--space-6); }
+
+/* Spacing */
+.p-2  { padding: var(--space-2); }
+.p-3  { padding: var(--space-3); }
+.p-4  { padding: var(--space-4); }
+.p-6  { padding: var(--space-6); }
+.px-4 { padding-left: var(--space-4); padding-right: var(--space-4); }
+.py-3 { padding-top: var(--space-3); padding-bottom: var(--space-3); }
+
+/* Radius */
+.rounded-sm    { border-radius: var(--radius-sm); }
+.rounded-md    { border-radius: var(--radius-md); }
+.rounded-lg    { border-radius: var(--radius-lg); }
+.rounded-xl    { border-radius: var(--radius-xl); }
+.rounded-2xl   { border-radius: var(--radius-2xl); }
+.rounded-full  { border-radius: var(--radius-full); }
+
+/* Badge / Tag */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding: 3px 10px;
+  border-radius: var(--radius-full);
+  font-size: var(--text-label);
+  font-weight: var(--weight-semibold);
+  letter-spacing: 0.03em;
+}
+.badge-success  { background: var(--color-success-surface);  color: var(--color-success-dark); }
+.badge-warning  { background: var(--color-warning-surface);  color: var(--color-warning-dark); }
+.badge-danger   { background: var(--color-danger-surface);   color: var(--color-danger-dark); }
+.badge-info     { background: var(--color-info-surface);     color: var(--color-info-dark); }
+.badge-primary  { background: var(--color-primary-surface);  color: var(--color-primary-dark); }
+.badge-neutral  { background: var(--color-surface-subtle);   color: var(--color-text-secondary); }
+
+/* Divider */
+.divider {
+  height: 1px;
+  background: var(--color-divider);
+  margin: var(--space-3) 0;
+}
