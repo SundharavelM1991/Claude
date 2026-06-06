@@ -1,7 +1,9 @@
 export const Colors = {
-  primary: '#4A90D9',
-  primaryDark: '#2C6FAC',
-  primaryLight: '#7BB5E8',
+  primary: '#6366F1',
+  primaryDark: '#4338CA',
+  primaryLight: '#818CF8',
+  primarySurface: '#EEF2FF',
+  primaryBorder: '#C7D2FE',
   secondary: '#F5A623',
   secondaryLight: '#FABB5C',
   success: '#4CAF50',
@@ -24,11 +26,11 @@ export const Colors = {
 
   cardShadow: 'rgba(0, 0, 0, 0.08)',
 
-  gradientStart: '#4A90D9',
-  gradientEnd: '#6C63FF',
+  gradientStart: '#4338CA',
+  gradientEnd: '#6366F1',
 
   tabBar: '#FFFFFF',
-  tabBarActive: '#4A90D9',
+  tabBarActive: '#6366F1',
   tabBarInactive: '#9CA8B8',
 };
 

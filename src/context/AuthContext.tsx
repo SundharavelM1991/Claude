@@ -9,6 +9,7 @@ interface AuthContextType {
   isLoading: boolean;
   isAuthenticated: boolean;
   login: (email: string, password: string) => Promise<void>;
+  loginWithPin: (pin: string) => Promise<void>;
   logout: () => Promise<void>;
   register: (data: RegisterData) => Promise<void>;
   selectChild: (child: Child) => void;
@@ -110,6 +111,23 @@ export function AuthProvider({ children: reactChildren }: { children: ReactNode 
     }
   }
 
+  async function loginWithPin(pin: string) {
+    setIsLoading(true);
+    try {
+      await new Promise(resolve => setTimeout(resolve, 800));
+      if (pin.length === 6) {
+        await AsyncStorage.setItem('auth_token', 'mock_token_pin');
+        setUser(MOCK_USER);
+        setChildren(MOCK_CHILDREN);
+        setSelectedChild(MOCK_CHILDREN[0]);
+      } else {
+        throw new Error('Invalid PIN');
+      }
+    } finally {
+      setIsLoading(false);
+    }
+  }
+
   async function register(data: RegisterData) {
     setIsLoading(true);
     try {
@@ -157,6 +175,7 @@ export function AuthProvider({ children: reactChildren }: { children: ReactNode 
         isLoading,
         isAuthenticated: !!user,
         login,
+        loginWithPin,
         logout,
         register,
         selectChild,
