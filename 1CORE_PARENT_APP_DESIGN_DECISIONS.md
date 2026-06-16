@@ -347,6 +347,8 @@ Reference aesthetic: Airbnb, Linear, Notion, Stripe — but with warmth.
 
 ### Color Palette
 
+**Final decision: Warm Teal + Coral** (chosen over Indigo+Amber, Sage+Peach, and Navy+Gold alternatives — best balance of premium SaaS feel and nurturing warmth for a care app).
+
 | Role | Name | Hex |
 |---|---|---|
 | Primary | Warm Teal | `#0D9488` |
@@ -365,24 +367,58 @@ Reference aesthetic: Airbnb, Linear, Notion, Stripe — but with warmth.
 linear-gradient(135deg, #0D9488 0%, #0F766E 100%)
 ```
 
+#### 60-30-10 Color Application Rule
+
+Applied per-screen as a discipline, not a literal pixel count. Fixes both clutter (too many competing colors) and flatness (no hierarchy).
+
+| Ratio | Role | Colors | Where it shows up |
+|---|---|---|---|
+| 60% | Dominant/neutral | `#F8F7F5` background + `#FFFFFF` surfaces | Screen background, card backgrounds, most of the canvas |
+| 30% | Secondary/brand | `#0D9488` Teal | Headers, active nav icons, primary buttons, child status card, links |
+| 10% | Accent | `#FB7185` Coral | CTAs, badges, key highlights that need attention |
+
+**Note:** Semantic colors (success/warning/danger) sit outside this ratio — used contextually only when that exact meaning applies, never as a substitute for the brand accent.
+
 ---
 
 ### Typography
 
-**Font Family:** `Plus Jakarta Sans` (preferred) or `Inter`
+**Final decision: `Plus Jakarta Sans`** — single font family across the entire app (chosen over Inter, Nunito, Poppins, and system fonts).
 
-| Style | Size | Weight | Line Height | Use |
-|---|---|---|---|---|
-| Display | 28–32px | 700 Bold | 1.2× | Welcome, hero text |
-| H1 | 22px | 600 SemiBold | 1.2× | Screen titles |
-| H2 | 18px | 600 SemiBold | 1.3× | Section headers |
-| Body | 16px | 400 Regular | 1.5× | Content |
-| Body Strong | 16px | 500 Medium | 1.5× | Labels, emphasis |
-| Caption | 13px | 400 Regular | 1.4× | Timestamps, metadata |
+**Why:** Rounded terminals give warmth matching the coral accent, while the geometric structure keeps it premium rather than cute. Excellent tabular figure support for payment amounts, dates, and PINs. Variable font — one file, multiple weights, better performance. Not as overused as Poppins/Nunito in startup templates.
+
+**Weight scale (4 weights only):**
+
+| Weight | Use |
+|---|---|
+| 400 Regular | Body text |
+| 500 Medium | Labels, emphasis, buttons |
+| 600 SemiBold | Headings, section titles |
+| 700 Bold | Display text, hero numbers (e.g. payment totals) |
+
+**Full type scale (size + line height):**
+
+| Style | Size | Line Height | Weight | Letter Spacing | Use |
+|---|---|---|---|---|---|
+| Display | 32px | 38px (1.19×) | 700 Bold | -0.5px | Welcome text, hero balance/amount |
+| H1 (Screen Title) | 24px | 30px (1.25×) | 600 SemiBold | -0.3px | "Dashboard", "Activity Feed" |
+| H2 (Section Header) | 18px | 24px (1.33×) | 600 SemiBold | 0 | "Reminders", "Incidents" card titles |
+| H3 (Card Title) | 16px | 22px (1.375×) | 600 SemiBold | 0 | Sub-card titles, list group headers |
+| Body | 16px | 24px (1.5×) | 400 Regular | 0 | Messages, notes, primary content |
+| Body Small | 14px | 20px (1.43×) | 400 Regular | 0 | Secondary list text, descriptions |
+| Label | 14px | 20px (1.43×) | 500 Medium | 0 | Form labels, button text |
+| Caption | 12px | 16px (1.33×) | 400 Regular | 0 | Timestamps, teacher names, metadata |
+| Overline | 11px | 14px (1.27×) | 600 SemiBold | +0.5px, uppercase | Tags, category chips |
+
+**The ratio rule:** Smaller text needs relatively *more* line height; larger text needs relatively *less*. Short headline lines don't need much breathing room; dense caption text needs more to stay scannable.
 
 **Rules:**
 - Never more than 3 font sizes on one screen
 - Timestamps and teacher names always Caption + text-secondary
+- **Body text line height must be ≥1.5×** — WCAG accessibility minimum, non-negotiable given this app handles health/medication/payment info
+- 16px is the floor for body text — smaller risks iOS auto-zoom on inputs and hurts readability for distracted, one-handed use
+- Enable tabular numerals (OpenType feature) on any screen with amounts, dates, or PINs so digits align in fixed-width columns
+- Support Dynamic Type / system font scaling — never hardcode pixel sizes that ignore accessibility settings
 
 ---
 
@@ -429,11 +465,69 @@ Minimum tap target: **44×44px**
 
 ### Icon System
 
-**Library:** Phosphor Icons (Duotone) or Lucide  
-**Size:** 24px standard, 20px compact contexts  
-**Style:** Consistent stroke weight, rounded caps  
-**State:** Active = filled, Inactive = outline (bottom tabs)  
-**Rule:** Never mix icon styles
+**Final decision: Phosphor Icons** (chosen over Lucide, Material Symbols, Font Awesome, Heroicons).
+
+**Why:** Largest consistent set (1,500+ icons, same stroke weight/corner radius throughout). Multiple weights of the *same* icon (Regular, Fill, Duotone) solve active/inactive tab states without switching icon families. Has a dedicated `phosphor-react-native` package. Rounded, warm style matches the brand direction. Free, MIT licensed.
+
+**Usage spec:**
+- **Size:** 24px standard, 20px in compact contexts
+- **Weight:** Regular for inactive states, Fill or Duotone for active states (e.g. bottom tab bar)
+- **Rule:** Never mix icon styles or pull icons from a second library for standard UI actions
+
+**Icon mapping for activity types:**
+
+| Activity | Phosphor Icon |
+|---|---|
+| Nap | `Moon` |
+| Medicine | `Pill` |
+| Notes | `NotePencil` |
+| Homework | `Books` |
+| Observation | `Eye` |
+| Incident | `WarningCircle` |
+| Bring-in | `Backpack` |
+
+**Known gap — custom icons needed:** Phosphor (and every generic icon pack) lacks good **diaper** and **bottle-feeding** icons. These 2 icons should be custom-drawn to match Phosphor's exact stroke weight (1.5px) and corner radius so they blend in seamlessly rather than looking like a mismatched sticker.
+
+---
+
+### Layout Style by Screen Type
+
+Different screens serve different purposes — each uses the layout pattern that fits its content type rather than one uniform style app-wide.
+
+| Screen | Layout Style | Why |
+|---|---|---|
+| Dashboard | **Bento-grid cards** (asymmetric sizing) | Mixed content types (status, incidents, actions, reminders) need visual hierarchy through size, not just position |
+| Activity Feed | **Vertical timeline / linear list** | Chronological storytelling — reads top-to-bottom like a story, not a grid |
+| Gallery | **Grid (2–3 column)** | Photos are visual-first; grid maximizes scanability |
+| Forms / Settings / Statements | **Grouped list** (iOS Settings-style) | Administrative, utilitarian — content density matters more than visual flair |
+| Child Profile | **Grouped list + hero header** | Photo/name as hero, then grouped sections (medication, allergy, contacts) below |
+
+**Bento-grid principle (Dashboard):** Not every card is the same size — size variation creates automatic visual hierarchy.
+
+```
+╭─────────────────────────────────╮
+│   Child Status (hero, full-width)│
+│   gradient, larger                │
+╰─────────────────────────────────╯
+
+╭───────────────╮  ╭───────────────╮
+│  Forms (3)     │  │  Payment Due   │
+╰───────────────╯  ╰───────────────╯
+
+╭─────────────────────────────────╮
+│   Reminders (compact list)        │
+╰─────────────────────────────────╯
+```
+
+The child status card is largest because it matters most emotionally. Forms/Payment are equal-weight twins (both quick actions). Reminders are a denser, smaller list (lower urgency).
+
+**Why not bento-grid everywhere:** Applying asymmetric cards to the Activity Feed would break its sequential narrative flow. Forms/Settings need a clean scannable list, not competing card sizes.
+
+**General layout principles (all screens):**
+- Single column — no multi-column layouts except the Gallery grid
+- Hierarchy through size and elevation, not heavy borders or dividers
+- Sticky context headers where needed (date pill on Activity Feed, child switcher tabs)
+- 16–20px breathing margin on every screen edge, consistent with the spacing system
 
 ---
 
