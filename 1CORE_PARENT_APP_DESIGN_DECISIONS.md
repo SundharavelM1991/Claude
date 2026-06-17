@@ -19,7 +19,9 @@
 8. [Gallery](#8-gallery)
 9. [Design System](#9-design-system)
 10. [Performance Optimization](#10-performance-optimization)
-11. [Future Requirements](#11-future-requirements)
+11. [Information Architecture — Splash, Login, Dashboard](#10-information-architecture--splash-login-dashboard)
+12. [Performance Optimization](#11-performance-optimization)
+13. [Future Requirements](#12-future-requirements)
 
 ---
 
@@ -559,7 +561,119 @@ The child status card is largest because it matters most emotionally. Forms/Paym
 
 ---
 
-## 10. Performance Optimization
+## 10. Information Architecture — Splash, Login, Dashboard
+
+### 10.1 Splash Screen
+
+**Purpose:** Brand moment + invisible routing decision. Does work behind the scenes, never requires a tap.
+
+**Content inventory:**
+- 1core logo
+- Optional tagline (only if it earns its place)
+- No interactive elements
+
+**Decision logic:**
+```
+App launches
+   │
+   ├─ Check session/auth token validity
+   ├─ Check app version (force update gate, if applicable)
+   ├─ Check network connectivity
+   └─ Prefetch non-sensitive data (parent name, center name)
+   │
+   ▼
+Route decision:
+   ├─ No network → Offline message on splash screen
+   ├─ First-time user (no account) → Invitation/Onboarding flow
+   ├─ Returning user → Login screen (always — quick login every time)
+   └─ Deep link from notification → Login screen, then route to target after auth
+```
+
+**Key rule:** Splash never routes directly to Dashboard — quick login is required every time.
+
+**Network error:** Shows an offline message directly on the splash screen. Parent must have connectivity to proceed.
+
+---
+
+### 10.2 Login Screen
+
+**Purpose:** Fastest possible authenticated entry, routed by intent.
+
+**Content inventory:**
+- 1core logo + center name
+- "Welcome back, [Parent name]"
+- Biometric prompt (auto-triggered)
+- Two intent buttons: **Open App** / **Sign In-Out**
+- Fallback links: Use PIN · Use password
+- Forgot PIN / Forgot password (nested, not top-level)
+
+**Decision tree:**
+```
+Login screen appears
+   │
+   ├─ Biometric available + enabled?
+   │     ├─ Yes → auto-trigger biometric
+   │     │         ├─ Success → route by intent (Dashboard or QR Scanner)
+   │     │         └─ Fail once → fall back to PIN entry
+   │     └─ No → show PIN entry directly
+   │
+   └─ Parent taps "Use password" → Password form
+```
+
+**States:**
+| State | Trigger |
+|---|---|
+| Default | Screen opens, biometric prompt fires |
+| PIN fallback | Biometric failed or unavailable |
+| Password fallback | Parent explicitly chooses it |
+| Network error | Can't reach auth server |
+
+**Forgot PIN flow:** Requires email verification — sends a reset link/code to the parent's registered email address. Handled in-app (not by center admin).
+
+**Lockout policy:** Deferred — to be decided later.
+
+---
+
+### 10.3 Dashboard Screen
+
+**Purpose:** "Things that need my attention" — action items summary.
+
+**Content inventory (priority order):**
+| Priority | Block | Content |
+|---|---|---|
+| 1 | Child status | Name, photo, checked in/out + time *(per child)* |
+| 2 | Incidents | List of unacknowledged incidents |
+| 3 | Action items | Forms pending count, Payment due amount |
+| 4 | Reminders | Sorted by urgency, max 3 + "See all" |
+| 5 | Fallback | "All caught up" → Activity feed bleeds in |
+
+**Entry points from Dashboard:**
+```
+Dashboard
+   ├─ Child status card       → tap → Time Card / Child Profile
+   ├─ Incident item            → tap → Incident detail (acknowledge inline)
+   ├─ Forms pill                → tap → Forms list
+   ├─ Payment pill               → tap → Payment screen
+   ├─ Reminder item               → tap → Relevant action (e.g. immunization record)
+   ├─ Header: Message icon         → tap → Messages tab
+   ├─ Header: QR icon               → tap → QR Scanner
+   └─ Header: Center switch          → tap → Center picker (bottom sheet)
+```
+
+**States:**
+| State | Behavior |
+|---|---|
+| Loading | Skeleton screens (shimmer placeholders in exact widget layout) |
+| All caught up | Warm message + activity feed bleed-in |
+| Has pending items | Sections render in priority order |
+| Multi-child | Status card per child; action widgets aggregate with child label per item |
+| Network error | **"Couldn't refresh" banner** at top — show cached/stale data below, not a blocking error screen |
+
+**Network error decision:** Stale-but-visible data with a subtle retry banner is better than a blocking error screen, since parents check this app for reassurance.
+
+---
+
+## 12. Performance Optimization
 
 ### Problem
 Heavy dashboard with multiple API calls causes slow load after login. Feels broken.
@@ -604,7 +718,7 @@ Parent never sees a loading state
 
 ---
 
-## 11. Future Requirements
+## 13. Future Requirements
 
 | Feature | Notes |
 |---|---|
