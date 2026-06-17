@@ -1,0 +1,1162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>1core — Parent Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  :root {
+    --primary: #5B5BD6;
+    --primary-light: #7C7CE0;
+    --primary-bg: rgba(91, 91, 214, 0.08);
+    --secondary: #14B8A6;
+    --secondary-bg: rgba(20, 184, 166, 0.08);
+    --accent: #FF8A3D;
+    --accent-bg: rgba(255, 138, 61, 0.08);
+    --success: #22C55E;
+    --success-bg: rgba(34, 197, 94, 0.08);
+    --warning: #F59E0B;
+    --warning-bg: rgba(245, 158, 11, 0.08);
+    --danger: #EF4444;
+    --danger-bg: rgba(239, 68, 68, 0.06);
+    --bg: #F8FAFC;
+    --surface: #FFFFFF;
+    --text-primary: #0F172A;
+    --text-secondary: #64748B;
+    --text-tertiary: #94A3B8;
+    --border: rgba(0, 0, 0, 0.04);
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.04);
+    --shadow-md: 0 2px 8px rgba(0, 0, 0, 0.04), 0 4px 16px rgba(0, 0, 0, 0.03);
+    --shadow-lg: 0 4px 12px rgba(0, 0, 0, 0.05), 0 8px 32px rgba(0, 0, 0, 0.04);
+    --shadow-hero: 0 8px 24px rgba(91, 91, 214, 0.15), 0 16px 48px rgba(91, 91, 214, 0.08);
+    --radius-sm: 12px;
+    --radius-md: 16px;
+    --radius-lg: 20px;
+    --radius-xl: 24px;
+  }
+
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: #1A1A2E;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 40px 20px;
+  }
+
+  .iphone-frame {
+    width: 390px;
+    height: 844px;
+    background: var(--bg);
+    border-radius: 44px;
+    overflow: hidden;
+    position: relative;
+    box-shadow:
+      0 0 0 2px #1a1a1a,
+      0 0 0 6px #2a2a2a,
+      0 0 0 8px #1a1a1a,
+      0 20px 60px rgba(0, 0, 0, 0.5);
+  }
+
+  .status-bar {
+    height: 54px;
+    padding: 14px 28px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: var(--bg);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  .status-bar-time {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text-primary);
+    letter-spacing: 0.2px;
+  }
+
+  .status-bar-icons {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .status-bar-icons svg {
+    width: 16px;
+    height: 16px;
+    fill: var(--text-primary);
+  }
+
+  .dynamic-island {
+    width: 120px;
+    height: 34px;
+    background: #000;
+    border-radius: 20px;
+    position: absolute;
+    top: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 200;
+  }
+
+  .scroll-content {
+    height: calc(844px - 54px - 82px);
+    overflow-y: auto;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .scroll-content::-webkit-scrollbar {
+    display: none;
+  }
+
+  .content {
+    padding: 4px 20px 24px;
+  }
+
+  /* Header */
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0 16px;
+  }
+
+  .header-left {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .greeting {
+    font-size: 14px;
+    font-weight: 400;
+    color: var(--text-secondary);
+    letter-spacing: 0.1px;
+  }
+
+  .greeting-name {
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--text-primary);
+    letter-spacing: -0.3px;
+    line-height: 1.3;
+  }
+
+  .header-right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .notification-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--surface);
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    box-shadow: var(--shadow-sm);
+    cursor: pointer;
+  }
+
+  .notification-btn svg {
+    width: 20px;
+    height: 20px;
+    stroke: var(--text-primary);
+    fill: none;
+    stroke-width: 1.8;
+  }
+
+  .notification-badge {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    width: 8px;
+    height: 8px;
+    background: var(--danger);
+    border-radius: 50%;
+    border: 2px solid var(--surface);
+  }
+
+  .avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--primary), var(--primary-light));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 15px;
+    font-weight: 600;
+    box-shadow: 0 2px 8px rgba(91, 91, 214, 0.25);
+  }
+
+  /* Child Selector */
+  .child-selector {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 14px;
+    background: var(--surface);
+    border-radius: var(--radius-sm);
+    box-shadow: var(--shadow-sm);
+    margin-bottom: 16px;
+    cursor: pointer;
+  }
+
+  .child-selector-avatar {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #FFB6C1, #FF8FB1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+  }
+
+  .child-selector-name {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-primary);
+    flex: 1;
+  }
+
+  .child-selector-chevron {
+    width: 16px;
+    height: 16px;
+    stroke: var(--text-tertiary);
+    fill: none;
+    stroke-width: 2;
+  }
+
+  /* Hero Card */
+  .hero-card {
+    background: linear-gradient(135deg, #5B5BD6 0%, #4747B3 50%, #3D3DA0 100%);
+    border-radius: var(--radius-lg);
+    padding: 24px;
+    color: white;
+    position: relative;
+    overflow: hidden;
+    box-shadow: var(--shadow-hero);
+    margin-bottom: 20px;
+  }
+
+  .hero-card::before {
+    content: '';
+    position: absolute;
+    top: -40%;
+    right: -20%;
+    width: 200px;
+    height: 200px;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.12) 0%, transparent 70%);
+    border-radius: 50%;
+  }
+
+  .hero-card::after {
+    content: '';
+    position: absolute;
+    bottom: -30%;
+    left: -10%;
+    width: 160px;
+    height: 160px;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.06) 0%, transparent 70%);
+    border-radius: 50%;
+  }
+
+  .hero-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 16px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .hero-child-info {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .hero-child-photo {
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #FFB6C1, #FF8FB1);
+    border: 3px solid rgba(255, 255, 255, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+  }
+
+  .hero-child-name {
+    font-size: 18px;
+    font-weight: 600;
+    letter-spacing: -0.2px;
+    margin-bottom: 2px;
+  }
+
+  .hero-center-name {
+    font-size: 12px;
+    font-weight: 400;
+    opacity: 0.75;
+  }
+
+  .hero-status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    background: rgba(34, 197, 94, 0.2);
+    border: 1px solid rgba(34, 197, 94, 0.3);
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 500;
+    backdrop-filter: blur(8px);
+  }
+
+  .hero-status-dot {
+    width: 7px;
+    height: 7px;
+    background: #4ADE80;
+    border-radius: 50%;
+    animation: pulse 2s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.6; transform: scale(1.2); }
+  }
+
+  .hero-details {
+    display: flex;
+    gap: 12px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .hero-detail-item {
+    flex: 1;
+    background: rgba(255, 255, 255, 0.12);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: var(--radius-sm);
+    padding: 12px;
+    text-align: center;
+  }
+
+  .hero-detail-label {
+    font-size: 11px;
+    font-weight: 400;
+    opacity: 0.7;
+    margin-bottom: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .hero-detail-value {
+    font-size: 14px;
+    font-weight: 600;
+  }
+
+  .hero-detail-icon {
+    font-size: 16px;
+    margin-bottom: 4px;
+    display: block;
+  }
+
+  /* Section */
+  .section {
+    margin-bottom: 20px;
+  }
+
+  .section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+  }
+
+  .section-title {
+    font-size: 17px;
+    font-weight: 600;
+    color: var(--text-primary);
+    letter-spacing: -0.2px;
+  }
+
+  .section-link {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--primary);
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+  /* Quick Actions */
+  .quick-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+
+  .quick-action-card {
+    background: var(--surface);
+    border-radius: var(--radius-md);
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+    box-shadow: var(--shadow-md);
+    cursor: pointer;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+    border: 1px solid var(--border);
+  }
+
+  .quick-action-card:hover {
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-lg);
+  }
+
+  .quick-action-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: var(--radius-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+  }
+
+  .quick-action-icon.primary { background: var(--primary-bg); }
+  .quick-action-icon.secondary { background: var(--secondary-bg); }
+  .quick-action-icon.accent { background: var(--accent-bg); }
+  .quick-action-icon.success { background: var(--success-bg); }
+
+  .quick-action-label {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-primary);
+  }
+
+  .quick-action-sublabel {
+    font-size: 11px;
+    color: var(--text-tertiary);
+    margin-top: -6px;
+  }
+
+  /* Priority Alerts */
+  .alert-card {
+    background: var(--surface);
+    border-radius: var(--radius-md);
+    padding: 14px 16px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    box-shadow: var(--shadow-sm);
+    margin-bottom: 10px;
+    border: 1px solid var(--border);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .alert-card::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+  }
+
+  .alert-card.high::before { background: var(--danger); }
+  .alert-card.medium::before { background: var(--warning); }
+  .alert-card.low::before { background: var(--primary); }
+
+  .alert-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+
+  .alert-icon.high { background: var(--danger-bg); }
+  .alert-icon.medium { background: var(--warning-bg); }
+  .alert-icon.low { background: var(--primary-bg); }
+
+  .alert-content {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .alert-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 2px;
+  }
+
+  .alert-desc {
+    font-size: 12px;
+    color: var(--text-secondary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .alert-badge {
+    padding: 3px 8px;
+    border-radius: 6px;
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    flex-shrink: 0;
+  }
+
+  .alert-badge.high {
+    background: var(--danger-bg);
+    color: var(--danger);
+  }
+
+  .alert-badge.medium {
+    background: var(--warning-bg);
+    color: var(--warning);
+  }
+
+  .alert-badge.low {
+    background: var(--primary-bg);
+    color: var(--primary);
+  }
+
+  /* Today's Summary */
+  .summary-scroll {
+    display: flex;
+    gap: 10px;
+    overflow-x: auto;
+    padding-bottom: 4px;
+    margin: 0 -20px;
+    padding: 0 20px 4px;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .summary-scroll::-webkit-scrollbar {
+    display: none;
+  }
+
+  .summary-card {
+    min-width: 105px;
+    background: var(--surface);
+    border-radius: var(--radius-md);
+    padding: 14px;
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--border);
+    flex-shrink: 0;
+  }
+
+  .summary-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 15px;
+    margin-bottom: 10px;
+  }
+
+  .summary-value {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--text-primary);
+    letter-spacing: -0.3px;
+    margin-bottom: 2px;
+  }
+
+  .summary-label {
+    font-size: 11px;
+    color: var(--text-tertiary);
+    font-weight: 400;
+  }
+
+  /* Timeline */
+  .timeline {
+    position: relative;
+    padding-left: 24px;
+  }
+
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 7px;
+    top: 8px;
+    bottom: 8px;
+    width: 1.5px;
+    background: linear-gradient(to bottom, var(--primary), rgba(91, 91, 214, 0.1));
+    border-radius: 1px;
+  }
+
+  .timeline-item {
+    position: relative;
+    padding-bottom: 18px;
+  }
+
+  .timeline-item:last-child {
+    padding-bottom: 0;
+  }
+
+  .timeline-dot {
+    position: absolute;
+    left: -20px;
+    top: 4px;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    border: 2px solid var(--primary);
+    background: var(--bg);
+  }
+
+  .timeline-item:first-child .timeline-dot {
+    background: var(--primary);
+    box-shadow: 0 0 0 4px rgba(91, 91, 214, 0.12);
+  }
+
+  .timeline-card {
+    background: var(--surface);
+    border-radius: var(--radius-sm);
+    padding: 14px;
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--border);
+  }
+
+  .timeline-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 6px;
+  }
+
+  .timeline-type {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--primary);
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .timeline-time {
+    font-size: 11px;
+    color: var(--text-tertiary);
+    font-weight: 500;
+  }
+
+  .timeline-desc {
+    font-size: 13px;
+    color: var(--text-secondary);
+    line-height: 1.5;
+  }
+
+  .timeline-photo {
+    width: 100%;
+    height: 120px;
+    background: linear-gradient(135deg, #FFE4E6, #FFF1F2, #EDE9FE);
+    border-radius: 10px;
+    margin-top: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 32px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .timeline-photo::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(255, 182, 193, 0.3), rgba(147, 130, 220, 0.2));
+    border-radius: 10px;
+  }
+
+  /* Events */
+  .event-card {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 12px 0;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.04);
+  }
+
+  .event-card:last-child {
+    border-bottom: none;
+  }
+
+  .event-date {
+    width: 44px;
+    height: 44px;
+    border-radius: var(--radius-sm);
+    background: var(--primary-bg);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .event-date-month {
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--primary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    line-height: 1;
+  }
+
+  .event-date-day {
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--primary);
+    line-height: 1.2;
+  }
+
+  .event-info {
+    flex: 1;
+  }
+
+  .event-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 2px;
+  }
+
+  .event-meta {
+    font-size: 11px;
+    color: var(--text-tertiary);
+  }
+
+  .event-arrow {
+    width: 20px;
+    height: 20px;
+    stroke: var(--text-tertiary);
+    fill: none;
+    stroke-width: 2;
+  }
+
+  /* Bottom Nav */
+  .bottom-nav {
+    height: 82px;
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-top: 1px solid rgba(0, 0, 0, 0.04);
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-around;
+    padding: 8px 8px 0;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+  }
+
+  .nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+    cursor: pointer;
+    padding: 4px 0;
+    min-width: 56px;
+  }
+
+  .nav-icon {
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+  }
+
+  .nav-icon svg {
+    width: 22px;
+    height: 22px;
+    stroke-width: 1.8;
+  }
+
+  .nav-item.active .nav-icon svg {
+    stroke: var(--primary);
+    fill: var(--primary);
+    stroke-width: 0;
+  }
+
+  .nav-item:not(.active) .nav-icon svg {
+    stroke: var(--text-tertiary);
+    fill: none;
+  }
+
+  .nav-label {
+    font-size: 10px;
+    font-weight: 500;
+    color: var(--text-tertiary);
+  }
+
+  .nav-item.active .nav-label {
+    color: var(--primary);
+    font-weight: 600;
+  }
+
+  .nav-badge {
+    position: absolute;
+    top: -4px;
+    right: -8px;
+    min-width: 16px;
+    height: 16px;
+    background: var(--danger);
+    border-radius: 8px;
+    font-size: 9px;
+    font-weight: 700;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 4px;
+    border: 2px solid var(--surface);
+  }
+
+  .home-indicator {
+    width: 134px;
+    height: 5px;
+    background: rgba(0, 0, 0, 0.15);
+    border-radius: 3px;
+    position: absolute;
+    bottom: 8px;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+</style>
+</head>
+<body>
+
+<div class="iphone-frame">
+  <div class="dynamic-island"></div>
+
+  <!-- Status Bar -->
+  <div class="status-bar">
+    <span class="status-bar-time">9:41</span>
+    <div class="status-bar-icons">
+      <svg viewBox="0 0 16 16"><path d="M1 10.5l3.5-3 3 2.5 4-5 3.5 3" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <svg viewBox="0 0 16 16"><path d="M8 2C4.5 2 1.5 4 0 7c1.5 3 4.5 5 8 5s6.5-2 8-5c-1.5-3-4.5-5-8-5z" fill="currentColor"/><circle cx="8" cy="7" r="2" fill="white"/></svg>
+      <svg viewBox="0 0 24 12"><rect x="0" y="0" width="20" height="12" rx="3" stroke="currentColor" stroke-width="1.5" fill="none"/><rect x="2" y="2" width="14" height="8" rx="1.5" fill="currentColor"/><path d="M22 4.5v3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+    </div>
+  </div>
+
+  <!-- Scrollable Content -->
+  <div class="scroll-content">
+    <div class="content">
+
+      <!-- Header -->
+      <div class="header">
+        <div class="header-left">
+          <span class="greeting">Good Morning</span>
+          <span class="greeting-name">Sarah Johnson</span>
+        </div>
+        <div class="header-right">
+          <button class="notification-btn">
+            <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+            <div class="notification-badge"></div>
+          </button>
+          <div class="avatar">SJ</div>
+        </div>
+      </div>
+
+      <!-- Child Selector -->
+      <div class="child-selector">
+        <div class="child-selector-avatar">👧</div>
+        <span class="child-selector-name">Ava Johnson</span>
+        <svg class="child-selector-chevron" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+
+      <!-- Hero Card -->
+      <div class="hero-card">
+        <div class="hero-top">
+          <div class="hero-child-info">
+            <div class="hero-child-photo">👧</div>
+            <div>
+              <div class="hero-child-name">Ava Johnson</div>
+              <div class="hero-center-name">Bright Beginnings Child Care</div>
+            </div>
+          </div>
+          <div class="hero-status-badge">
+            <div class="hero-status-dot"></div>
+            Checked In
+          </div>
+        </div>
+        <div class="hero-details">
+          <div class="hero-detail-item">
+            <span class="hero-detail-icon">🏫</span>
+            <div class="hero-detail-label">Status</div>
+            <div class="hero-detail-value">In Class</div>
+          </div>
+          <div class="hero-detail-item">
+            <span class="hero-detail-icon">🕗</span>
+            <div class="hero-detail-label">Check-In</div>
+            <div class="hero-detail-value">8:30 AM</div>
+          </div>
+          <div class="hero-detail-item">
+            <span class="hero-detail-icon">👩‍🏫</span>
+            <div class="hero-detail-label">Teacher</div>
+            <div class="hero-detail-value">Ms. Emily</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Actions -->
+      <div class="section">
+        <div class="section-header">
+          <span class="section-title">Quick Actions</span>
+        </div>
+        <div class="quick-actions">
+          <div class="quick-action-card">
+            <div class="quick-action-icon primary">📲</div>
+            <span class="quick-action-label">Check In / Out</span>
+            <span class="quick-action-sublabel">QR Code Scan</span>
+          </div>
+          <div class="quick-action-card">
+            <div class="quick-action-icon accent">📋</div>
+            <span class="quick-action-label">Report Absence</span>
+            <span class="quick-action-sublabel">Notify center</span>
+          </div>
+          <div class="quick-action-card">
+            <div class="quick-action-icon secondary">💬</div>
+            <span class="quick-action-label">Message Teacher</span>
+            <span class="quick-action-sublabel">Ms. Emily</span>
+          </div>
+          <div class="quick-action-card">
+            <div class="quick-action-icon success">💳</div>
+            <span class="quick-action-label">Make Payment</span>
+            <span class="quick-action-sublabel">$320.00 due</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Priority Alerts -->
+      <div class="section">
+        <div class="section-header">
+          <span class="section-title">Priority Alerts</span>
+          <a class="section-link">View All</a>
+        </div>
+        <div class="alert-card high">
+          <div class="alert-icon high">⚠️</div>
+          <div class="alert-content">
+            <div class="alert-title">Incident Requires Acknowledgement</div>
+            <div class="alert-desc">Please review incident report from today</div>
+          </div>
+          <span class="alert-badge high">High</span>
+        </div>
+        <div class="alert-card medium">
+          <div class="alert-icon medium">💰</div>
+          <div class="alert-content">
+            <div class="alert-title">Payment Due</div>
+            <div class="alert-desc">$320.00 due on May 25</div>
+          </div>
+          <span class="alert-badge medium">Med</span>
+        </div>
+        <div class="alert-card low">
+          <div class="alert-icon low">📢</div>
+          <div class="alert-content">
+            <div class="alert-title">New Announcement</div>
+            <div class="alert-desc">Summer Camp Registration Open</div>
+          </div>
+          <span class="alert-badge low">Low</span>
+        </div>
+      </div>
+
+      <!-- Today's Summary -->
+      <div class="section">
+        <div class="section-header">
+          <span class="section-title">Today's Summary</span>
+        </div>
+        <div class="summary-scroll">
+          <div class="summary-card">
+            <div class="summary-icon" style="background: var(--primary-bg);">🕗</div>
+            <div class="summary-value">8:30 AM</div>
+            <div class="summary-label">Check-In</div>
+          </div>
+          <div class="summary-card">
+            <div class="summary-icon" style="background: var(--secondary-bg);">🍽️</div>
+            <div class="summary-value">2 of 3</div>
+            <div class="summary-label">Meals</div>
+          </div>
+          <div class="summary-card">
+            <div class="summary-icon" style="background: var(--accent-bg);">😴</div>
+            <div class="summary-value">1h 45m</div>
+            <div class="summary-label">Nap</div>
+          </div>
+          <div class="summary-card">
+            <div class="summary-icon" style="background: var(--success-bg);">🧷</div>
+            <div class="summary-value">2</div>
+            <div class="summary-label">Diapers</div>
+          </div>
+          <div class="summary-card">
+            <div class="summary-icon" style="background: rgba(244, 114, 182, 0.08);">⭐</div>
+            <div class="summary-value">3 of 4</div>
+            <div class="summary-label">Activities</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Recent Activity -->
+      <div class="section">
+        <div class="section-header">
+          <span class="section-title">Recent Activity</span>
+          <a class="section-link">See All</a>
+        </div>
+        <div class="timeline">
+          <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="timeline-card">
+              <div class="timeline-header">
+                <span class="timeline-type">📸 Photo Added</span>
+                <span class="timeline-time">10:30 AM</span>
+              </div>
+              <div class="timeline-desc">Ava enjoyed painting with friends during art class.</div>
+              <div class="timeline-photo">🎨</div>
+            </div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="timeline-card">
+              <div class="timeline-header">
+                <span class="timeline-type">🍎 Morning Snack</span>
+                <span class="timeline-time">9:45 AM</span>
+              </div>
+              <div class="timeline-desc">Apple slices and milk served. Ate well.</div>
+            </div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="timeline-card">
+              <div class="timeline-header">
+                <span class="timeline-type">📖 Circle Time</span>
+                <span class="timeline-time">9:00 AM</span>
+              </div>
+              <div class="timeline-desc">Participated in a storytelling session. Very engaged and attentive today.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Upcoming Events -->
+      <div class="section" style="padding-bottom: 8px;">
+        <div class="section-header">
+          <span class="section-title">Upcoming Events</span>
+          <a class="section-link">Calendar</a>
+        </div>
+        <div style="background: var(--surface); border-radius: var(--radius-md); padding: 4px 16px; box-shadow: var(--shadow-sm); border: 1px solid var(--border);">
+          <div class="event-card">
+            <div class="event-date">
+              <span class="event-date-month">May</span>
+              <span class="event-date-day">28</span>
+            </div>
+            <div class="event-info">
+              <div class="event-title">Parent Teacher Meeting</div>
+              <div class="event-meta">10:00 AM — Room 3B</div>
+            </div>
+            <svg class="event-arrow" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          </div>
+          <div class="event-card">
+            <div class="event-date">
+              <span class="event-date-month">Jun</span>
+              <span class="event-date-day">01</span>
+            </div>
+            <div class="event-info">
+              <div class="event-title">Summer Camp Registration</div>
+              <div class="event-meta">Deadline — Online</div>
+            </div>
+            <svg class="event-arrow" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          </div>
+          <div class="event-card">
+            <div class="event-date">
+              <span class="event-date-month">Jun</span>
+              <span class="event-date-day">15</span>
+            </div>
+            <div class="event-info">
+              <div class="event-title">Field Trip — City Zoo</div>
+              <div class="event-meta">All day — Permission required</div>
+            </div>
+            <svg class="event-arrow" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Bottom Navigation -->
+  <div class="bottom-nav">
+    <div class="nav-item active">
+      <div class="nav-icon">
+        <svg viewBox="0 0 24 24"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 01-1 1H4a1 1 0 01-1-1V9.5z"/></svg>
+      </div>
+      <span class="nav-label">Home</span>
+    </div>
+    <div class="nav-item">
+      <div class="nav-icon">
+        <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+      </div>
+      <span class="nav-label">Activities</span>
+    </div>
+    <div class="nav-item">
+      <div class="nav-icon">
+        <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+        <span class="nav-badge">3</span>
+      </div>
+      <span class="nav-label">Messages</span>
+    </div>
+    <div class="nav-item">
+      <div class="nav-icon">
+        <svg viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+      </div>
+      <span class="nav-label">Billing</span>
+    </div>
+    <div class="nav-item">
+      <div class="nav-icon">
+        <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      </div>
+      <span class="nav-label">Profile</span>
+    </div>
+    <div class="home-indicator"></div>
+  </div>
+</div>
+
+</body>
+</html>

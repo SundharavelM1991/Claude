@@ -1,0 +1,730 @@
+# 1core Parent Mobile App — Design Decisions & Requirements
+
+**Product:** 1core  
+**Audience:** Parents of children enrolled in child care centers  
+**Role:** UI/UX Design Reference Document  
+**Status:** In Progress
+
+---
+
+## Table of Contents
+
+1. [Product Overview](#1-product-overview)
+2. [Current Features](#2-current-features)
+3. [Feature Gaps & Decisions](#3-feature-gaps--decisions)
+4. [Navigation Architecture](#4-navigation-architecture)
+5. [Dashboard Screen](#5-dashboard-screen)
+6. [Login Screen](#6-login-screen)
+7. [Activity Feed Screen](#7-activity-feed-screen)
+8. [Gallery](#8-gallery)
+9. [Design System](#9-design-system)
+10. [Performance Optimization](#10-performance-optimization)
+11. [Information Architecture — Splash, Login, Dashboard](#10-information-architecture--splash-login-dashboard)
+12. [Performance Optimization](#11-performance-optimization)
+13. [Future Requirements](#12-future-requirements)
+
+---
+
+## 1. Product Overview
+
+1core is a mobile app for parents whose children are enrolled in a child care center. The core emotional job of the app is:
+
+> **"Make me feel connected to my child's day without being physically there."**
+
+Target users are millennial and Gen Z parents who have high expectations for modern, premium mobile experiences.
+
+---
+
+## 2. Current Features
+
+| # | Feature | Details |
+|---|---|---|
+| 1 | Sign In/Out | QR code scan at center |
+| 2 | Activity Feed | Nap, diaper, notes, incident, bring-in, medicine, bottle, homework, observation — posted by teachers |
+| 3 | Incident Acknowledge | Parents acknowledge pending incidents |
+| 4 | Form Management | Forms with status visibility (Pending / Signed / Expiring Soon) |
+| 5 | Payment | Mostly auto-pay |
+| 6 | Reminders | Bring-in, health checkup, immunization, medicine expiry |
+| 7 | In-App Messaging | Direct messaging with teachers, unread badge |
+| 8 | Child Profile | Personal info, medication, special diet, allergy, enrollment, contacts, restricted persons |
+| 9 | Parent Profile | Personal info management |
+| 10 | Contact Management | Authorized pickup persons (within contact management) |
+| 11 | Gallery | Photos attached to activity entries |
+| 12 | Settings | Notification preferences (granular by activity type), app login preference |
+| 13 | Statements | Account statement + year-end tax statement |
+| 14 | Notifications | Push notifications with granular type control |
+| 15 | Record Absence | Can be recorded in advance |
+| 16 | Multi-Child Support | Multiple children per parent account |
+| 17 | Time Card | Attendance history inside Child Profile |
+| 18 | Multi-Center | Login once, switch centers via header button |
+| 19 | Pickup Notification | Parent notified instantly when contact picks up child |
+
+---
+
+## 3. Feature Gaps & Decisions
+
+### 3.1 Confirmed Gap — Gallery Context
+**Problem:** Gallery shows photos without activity context (activity type, time, teacher note) even though photos are already linked to activity entries at post time.
+
+**Decision:** Surface existing metadata in the gallery UI:
+- Each photo tile shows activity type + timestamp label
+- Photo detail view shows: activity type, timestamp, teacher's note, and a "View in Feed" deep link
+- Gallery filter tabs (All · Art · Outdoor · Meals · etc.) using existing activity type tags — no extra data needed
+
+### 3.2 Confirmed Gap — Authorized Pickup Clarity
+**Resolution:** Authorized pickup is already handled within Contact Management. No change needed.
+
+### 3.3 No Change Needed
+- Attendance history → Time Card in Child Profile ✓
+- Form status visibility → already implemented ✓
+- Notification granularity → already granular by activity type ✓
+- Pickup notification → already implemented ✓
+- Absence in advance → already supported ✓
+- Multi-child → already supported ✓
+
+### 3.4 Future Requirements (Not in Current Scope)
+- Center calendar and announcements
+- Developmental milestones / progress tracking
+
+---
+
+## 4. Navigation Architecture
+
+### Decision: Bottom Tab Bar + Hamburger Menu for Secondary Items
+
+**Rationale:** Parents open the app 2–3 times daily. Features hidden behind a hamburger-only menu feel one step too far for daily-use actions.
+
+### Bottom Tabs (Always Visible)
+
+| Tab | Icon State |
+|---|---|
+| Home (Dashboard) | Filled when active |
+| Activity Feed | Filled when active |
+| Messages | Filled when active + unread badge |
+| Gallery | Filled when active |
+| Menu | Always outline |
+
+### Header (Persistent)
+
+| Element | Position |
+|---|---|
+| Menu icon | Left |
+| Message icon (with unread badge) | Right |
+| QR Scan icon | Right |
+| Center Switch button | Right |
+
+**QR Scan stays in header** — it's a contextual physical action at the center door, not a navigation destination.
+
+### Menu (Secondary Navigation)
+
+Accessed via bottom tab or header icon. Contains:
+- Child Profile
+- Forms
+- Payment & Statements
+- Reminders
+- Record Absence
+- Settings
+- Parent Profile
+
+---
+
+## 5. Dashboard Screen
+
+### Purpose
+> Dashboard = "Things that need my attention"  
+> Activity tab = "What's happening with my child"
+
+The dashboard is an **action items summary**, not a content feed.
+
+### Layout (Top to Bottom)
+
+#### Header
+Menu icon · [1core logo or center name] · Message (badge) · QR Scan · Center Switch
+
+#### Section 1 — Child Status Card
+- Checked in / Checked out + timestamp
+- Child name + photo
+- **Multi-child:** One compact card per child, stacked or side-by-side
+- **Design:** Soft teal gradient background, white text, child circle avatar
+
+#### Section 2 — Incidents
+- Pending incidents requiring acknowledgement
+- Highest priority after status — safety critical
+- Empty: section collapses, not shown
+
+#### Section 3 — Action Items (Side by Side)
+Two compact pill cards:
+```
+[ 📋 3 Forms pending ]   [ 💳 1 Payment due ]
+```
+- Each taps into its own screen
+- Payment expands **inline** (not modal) when something is due — pushes content below down
+- Incidents remain above and unaffected
+
+#### Section 4 — Reminders
+- **Not a slider/carousel** — stacked list sorted by urgency (days remaining)
+- Max 3 visible, "See all" link
+- Most critical reminder never hidden behind a swipe
+
+#### Section 5 — Empty / All Caught Up State
+When no incidents, no pending forms, no overdue payment, no urgent reminders:
+- Show warm "You're all caught up" message with simple illustration
+- Activity feed bleeds in below to fill the screen with content
+- Confirms nothing was missed — reassures the parent
+
+---
+
+## 6. Login Screen
+
+### Session Behavior
+- Quick login required every time the app comes to foreground
+- Login once, then switch centers via header — no re-login per center
+
+### Returning User (Default State)
+Biometric auto-triggers the moment the screen appears. No button tap required.
+
+```
+        [1core logo]
+        [Center name]
+
+     Welcome back, [Parent name]
+
+        [  👁 / 👆  ]
+     Authenticating...
+
+   ─────────────────────
+   Use PIN  ·  Use password
+```
+
+- If biometric fails once → auto-fall back to PIN (don't retry biometric twice)
+- Center name shown for multi-center context clarity
+
+### Split Intent: Two Entry Points on Login Screen
+
+**Product requirement:** Allow parent to choose between opening the app or going directly to QR scan.
+
+**Decision:** Both options require biometric authentication first. Difference is destination only.
+
+```
+        [1core logo]
+        Welcome back, [Parent name]
+
+   [  Open App  ]   [  Sign In/Out  ]
+
+        Use PIN  ·  Use password
+```
+
+- **Open App** → authenticates → Dashboard
+- **Sign In/Out** → authenticates → QR Scanner directly
+- Rationale: QR sign-in/out is safety-critical (child custody). Cannot bypass authentication. One biometric gesture = same effort, no security compromise.
+
+### PIN Entry State
+```
+      Enter your PIN
+
+        ● ● ● ○ ○ ○
+
+    [1] [2] [3]
+    [4] [5] [6]
+    [7] [8] [9]
+    [⌫] [0] [  ]
+
+      Forgot PIN?
+```
+- Large tap targets (parent has one hand occupied)
+- Auto-submit on 6th digit — no confirm button
+
+### Password State
+- Standard email + password form
+- Show/hide password toggle
+- "Forgot password?" link
+- Least frequent path — no need to over-design
+
+### First-Time (Invitation) Flow
+Separate from login entirely — 3 steps:
+1. **Verify** — tap magic link from email/SMS, confirms identity
+2. **Secure** — set password + PIN, enable biometric (skippable, nudge strongly)
+3. **Done** — lands on dashboard, center already connected via invitation
+
+### Performance: Prefetch During Authentication
+Start fetching dashboard API data the moment the login screen appears — before parent authenticates. By the time biometric succeeds and screen transition plays, data is ready.
+
+---
+
+## 7. Activity Feed Screen
+
+### Purpose
+The emotional core of the app. Parents feel connected to their child's day here.
+
+### Layout Decisions
+
+**Chronological direction:** Oldest first, newest at bottom. Mirrors how a day unfolds. Parent scrolls down to "arrive" at the current moment.
+
+**Date navigation:** Sticky date pill at top — `← Today →` with arrow navigation. Tapping opens a date picker.
+
+**Filter chips:** Horizontal scrollable row below date:
+```
+All · Nap · Bottle · Incident · Notes · Medicine · Diaper · Homework · Observation
+```
+
+**Multi-child:** Tab switcher (child name + avatar) pinned below header. Never a combined feed.
+
+### Activity Type Visual System
+
+Color-coded left accent strip + activity-specific icon on every card.
+
+| Activity | Icon | Strip Color |
+|---|---|---|
+| Nap | 🌙 | Soft Blue |
+| Diaper | 🍼 | Lavender |
+| Bottle | 🍶 | Green |
+| Medicine | 💊 | Teal |
+| Bring-in | 🎒 | Orange |
+| Notes | 📝 | Amber |
+| Homework | 📚 | Amber |
+| Observation | 👁 | Blue-grey |
+| Incident | ⚠️ | Red |
+
+### Feed Card Anatomy
+
+```
+[Color strip] [Icon] [Activity type]        [Time]
+              [Note text — 2 lines max           ]
+              [Photo thumbnail if attached       ]
+              [Teacher name — small, muted       ]
+```
+
+### Incident Card (Special Treatment)
+- Full-width red left border (4px vs 2px for others)
+- Slightly elevated shadow
+- Subtle red-tinted card background
+- Inline **Acknowledge** button — parent never navigates away to acknowledge
+- Visually impossible to miss while scrolling
+
+### Empty State
+Morning empty state feels anticipatory, not broken:
+> "Emma's day is just getting started."  
+> + subtle illustration
+
+### Real-Time Updates
+- Pull-to-refresh
+- When push notification brings parent into feed → auto-scroll to new entry + brief highlight animation
+
+---
+
+## 8. Gallery
+
+### Current State
+Photos are already attached to activity entries at post time. The context is lost only in the gallery view.
+
+### Fix — Surface Existing Metadata
+
+**Grid view:** Each photo tile shows label at bottom:
+```
+[ photo ]
+Outdoor Play · Jun 15, 2:30 PM
+```
+
+**Photo detail view:**
+- Activity type + timestamp
+- Teacher's note from that entry
+- "View in Feed" deep link to original activity entry
+
+**Filter tabs (no extra data needed — reuses activity type):**
+```
+All · Art · Outdoor · Meals · Milestones
+```
+
+---
+
+## 9. Design System
+
+### Design Philosophy
+> Warm but premium, not clinical or childish.  
+> Feels like it was built for me, not for a school admin.
+
+Reference aesthetic: Airbnb, Linear, Notion, Stripe — but with warmth.
+
+---
+
+### Color Palette
+
+**Final decision: Warm Teal + Coral** (chosen over Indigo+Amber, Sage+Peach, and Navy+Gold alternatives — best balance of premium SaaS feel and nurturing warmth for a care app).
+
+| Role | Name | Hex |
+|---|---|---|
+| Primary | Warm Teal | `#0D9488` |
+| Primary Dark | Deep Teal | `#0F766E` |
+| Accent | Soft Coral | `#FB7185` |
+| Background | Warm Off-white | `#F8F7F5` |
+| Surface | Pure White | `#FFFFFF` |
+| Text Primary | Near Black | `#111827` |
+| Text Secondary | Warm Grey | `#6B7280` |
+| Success | Soft Green | `#10B981` |
+| Warning | Amber | `#F59E0B` |
+| Danger | Red | `#EF4444` |
+
+**Key gradient (hero cards only):**
+```
+linear-gradient(135deg, #0D9488 0%, #0F766E 100%)
+```
+
+#### 60-30-10 Color Application Rule
+
+Applied per-screen as a discipline, not a literal pixel count. Fixes both clutter (too many competing colors) and flatness (no hierarchy).
+
+| Ratio | Role | Colors | Where it shows up |
+|---|---|---|---|
+| 60% | Dominant/neutral | `#F8F7F5` background + `#FFFFFF` surfaces | Screen background, card backgrounds, most of the canvas |
+| 30% | Secondary/brand | `#0D9488` Teal | Headers, active nav icons, primary buttons, child status card, links |
+| 10% | Accent | `#FB7185` Coral | CTAs, badges, key highlights that need attention |
+
+**Note:** Semantic colors (success/warning/danger) sit outside this ratio — used contextually only when that exact meaning applies, never as a substitute for the brand accent.
+
+---
+
+### Typography
+
+**Final decision: `Plus Jakarta Sans`** — single font family across the entire app (chosen over Inter, Nunito, Poppins, and system fonts).
+
+**Why:** Rounded terminals give warmth matching the coral accent, while the geometric structure keeps it premium rather than cute. Excellent tabular figure support for payment amounts, dates, and PINs. Variable font — one file, multiple weights, better performance. Not as overused as Poppins/Nunito in startup templates.
+
+**Weight scale (4 weights only):**
+
+| Weight | Use |
+|---|---|
+| 400 Regular | Body text |
+| 500 Medium | Labels, emphasis, buttons |
+| 600 SemiBold | Headings, section titles |
+| 700 Bold | Display text, hero numbers (e.g. payment totals) |
+
+**Full type scale (size + line height):**
+
+| Style | Size | Line Height | Weight | Letter Spacing | Use |
+|---|---|---|---|---|---|
+| Display | 32px | 38px (1.19×) | 700 Bold | -0.5px | Welcome text, hero balance/amount |
+| H1 (Screen Title) | 24px | 30px (1.25×) | 600 SemiBold | -0.3px | "Dashboard", "Activity Feed" |
+| H2 (Section Header) | 18px | 24px (1.33×) | 600 SemiBold | 0 | "Reminders", "Incidents" card titles |
+| H3 (Card Title) | 16px | 22px (1.375×) | 600 SemiBold | 0 | Sub-card titles, list group headers |
+| Body | 16px | 24px (1.5×) | 400 Regular | 0 | Messages, notes, primary content |
+| Body Small | 14px | 20px (1.43×) | 400 Regular | 0 | Secondary list text, descriptions |
+| Label | 14px | 20px (1.43×) | 500 Medium | 0 | Form labels, button text |
+| Caption | 12px | 16px (1.33×) | 400 Regular | 0 | Timestamps, teacher names, metadata |
+| Overline | 11px | 14px (1.27×) | 600 SemiBold | +0.5px, uppercase | Tags, category chips |
+
+**The ratio rule:** Smaller text needs relatively *more* line height; larger text needs relatively *less*. Short headline lines don't need much breathing room; dense caption text needs more to stay scannable.
+
+**Rules:**
+- Never more than 3 font sizes on one screen
+- Timestamps and teacher names always Caption + text-secondary
+- **Body text line height must be ≥1.5×** — WCAG accessibility minimum, non-negotiable given this app handles health/medication/payment info
+- 16px is the floor for body text — smaller risks iOS auto-zoom on inputs and hurts readability for distracted, one-handed use
+- Enable tabular numerals (OpenType feature) on any screen with amounts, dates, or PINs so digits align in fixed-width columns
+- Support Dynamic Type / system font scaling — never hardcode pixel sizes that ignore accessibility settings
+
+---
+
+### Spacing (8pt Grid)
+
+| Token | Value | Use |
+|---|---|---|
+| xs | 4px | Icon gaps |
+| sm | 8px | Inner element spacing |
+| md | 16px | Card padding, section gaps |
+| lg | 24px | Between major sections |
+| xl | 32px | Screen-level spacing |
+
+- Screen horizontal padding: **20px**
+- Minimum gap between cards: **12px**
+- Bottom tab bar respects safe area insets
+
+---
+
+### Card Design
+
+**Spec:**
+- Border radius: `16px`
+- Shadow: `0px 1px 3px rgba(0,0,0,0.06), 0px 4px 12px rgba(0,0,0,0.04)`
+- Background: `#FFFFFF`
+- Inner padding: `16px` or `20px`
+- No internal divider lines — use spacing instead
+- No hard borders — elevation and background color create separation
+
+---
+
+### Buttons
+
+| Type | Height | Radius | Use |
+|---|---|---|---|
+| Primary | 48px | 24px (pill) | Main actions |
+| Secondary | 48px | 12px | Secondary actions |
+| Destructive | 48px | 24px | Delete, remove |
+| Text/Link | auto | — | Tertiary, inline |
+
+Minimum tap target: **44×44px**
+
+---
+
+### Icon System
+
+**Final decision: Phosphor Icons** (chosen over Lucide, Material Symbols, Font Awesome, Heroicons).
+
+**Why:** Largest consistent set (1,500+ icons, same stroke weight/corner radius throughout). Multiple weights of the *same* icon (Regular, Fill, Duotone) solve active/inactive tab states without switching icon families. Has a dedicated `phosphor-react-native` package. Rounded, warm style matches the brand direction. Free, MIT licensed.
+
+**Usage spec:**
+- **Size:** 24px standard, 20px in compact contexts
+- **Weight:** Regular for inactive states, Fill or Duotone for active states (e.g. bottom tab bar)
+- **Rule:** Never mix icon styles or pull icons from a second library for standard UI actions
+
+**Icon mapping for activity types:**
+
+| Activity | Phosphor Icon |
+|---|---|
+| Nap | `Moon` |
+| Medicine | `Pill` |
+| Notes | `NotePencil` |
+| Homework | `Books` |
+| Observation | `Eye` |
+| Incident | `WarningCircle` |
+| Bring-in | `Backpack` |
+
+**Known gap — custom icons needed:** Phosphor (and every generic icon pack) lacks good **diaper** and **bottle-feeding** icons. These 2 icons should be custom-drawn to match Phosphor's exact stroke weight (1.5px) and corner radius so they blend in seamlessly rather than looking like a mismatched sticker.
+
+---
+
+### Layout Style by Screen Type
+
+Different screens serve different purposes — each uses the layout pattern that fits its content type rather than one uniform style app-wide.
+
+| Screen | Layout Style | Why |
+|---|---|---|
+| Dashboard | **Bento-grid cards** (asymmetric sizing) | Mixed content types (status, incidents, actions, reminders) need visual hierarchy through size, not just position |
+| Activity Feed | **Vertical timeline / linear list** | Chronological storytelling — reads top-to-bottom like a story, not a grid |
+| Gallery | **Grid (2–3 column)** | Photos are visual-first; grid maximizes scanability |
+| Forms / Settings / Statements | **Grouped list** (iOS Settings-style) | Administrative, utilitarian — content density matters more than visual flair |
+| Child Profile | **Grouped list + hero header** | Photo/name as hero, then grouped sections (medication, allergy, contacts) below |
+
+**Bento-grid principle (Dashboard):** Not every card is the same size — size variation creates automatic visual hierarchy.
+
+```
+╭─────────────────────────────────╮
+│   Child Status (hero, full-width)│
+│   gradient, larger                │
+╰─────────────────────────────────╯
+
+╭───────────────╮  ╭───────────────╮
+│  Forms (3)     │  │  Payment Due   │
+╰───────────────╯  ╰───────────────╯
+
+╭─────────────────────────────────╮
+│   Reminders (compact list)        │
+╰─────────────────────────────────╯
+```
+
+The child status card is largest because it matters most emotionally. Forms/Payment are equal-weight twins (both quick actions). Reminders are a denser, smaller list (lower urgency).
+
+**Why not bento-grid everywhere:** Applying asymmetric cards to the Activity Feed would break its sequential narrative flow. Forms/Settings need a clean scannable list, not competing card sizes.
+
+**General layout principles (all screens):**
+- Single column — no multi-column layouts except the Gallery grid
+- Hierarchy through size and elevation, not heavy borders or dividers
+- Sticky context headers where needed (date pill on Activity Feed, child switcher tabs)
+- 16–20px breathing margin on every screen edge, consistent with the spacing system
+
+---
+
+### Web Patterns → Mobile Native (Replace These)
+
+| Web Pattern | Mobile Replacement |
+|---|---|
+| Dropdown select | Bottom sheet picker |
+| Center-screen modal dialog | Bottom sheet (slides up from bottom) |
+| Data table | Card list with avatar + metadata |
+| Web accordion | Expandable card with spring animation |
+| Browser-default form inputs | Floating label inputs, 48px height |
+| Small text link buttons | Pill buttons, 48px height |
+| Horizontal scroll table | Swipeable native cards |
+| Web pagination | Infinite scroll or "Load more" button |
+
+---
+
+### Key "Wow" Moments
+
+| Moment | Design |
+|---|---|
+| Child Status Card | Teal gradient, child photo circle, white text — first emotional touchpoint |
+| Activity Feed | Color-coded cards, not a uniform list — feels like a story |
+| Login Screen | Full-screen, clean, biometric pulse animation — premium and focused |
+| Incident Card | Red border, elevated shadow, coral tint — impossible to miss |
+| All Caught Up State | Warm illustration, intentional message — positive and reassuring |
+| Photo Detail | Activity context + deep link — photos tell a story |
+
+---
+
+## 10. Information Architecture — Splash, Login, Dashboard
+
+### 10.1 Splash Screen
+
+**Purpose:** Brand moment + invisible routing decision. Does work behind the scenes, never requires a tap.
+
+**Content inventory:**
+- 1core logo
+- Optional tagline (only if it earns its place)
+- No interactive elements
+
+**Decision logic:**
+```
+App launches
+   │
+   ├─ Check session/auth token validity
+   ├─ Check app version (force update gate, if applicable)
+   ├─ Check network connectivity
+   └─ Prefetch non-sensitive data (parent name, center name)
+   │
+   ▼
+Route decision:
+   ├─ No network → Offline message on splash screen
+   ├─ First-time user (no account) → Invitation/Onboarding flow
+   ├─ Returning user → Login screen (always — quick login every time)
+   └─ Deep link from notification → Login screen, then route to target after auth
+```
+
+**Key rule:** Splash never routes directly to Dashboard — quick login is required every time.
+
+**Network error:** Shows an offline message directly on the splash screen. Parent must have connectivity to proceed.
+
+---
+
+### 10.2 Login Screen
+
+**Purpose:** Fastest possible authenticated entry, routed by intent.
+
+**Content inventory:**
+- 1core logo + center name
+- "Welcome back, [Parent name]"
+- Biometric prompt (auto-triggered)
+- Two intent buttons: **Open App** / **Sign In-Out**
+- Fallback links: Use PIN · Use password
+- Forgot PIN / Forgot password (nested, not top-level)
+
+**Decision tree:**
+```
+Login screen appears
+   │
+   ├─ Biometric available + enabled?
+   │     ├─ Yes → auto-trigger biometric
+   │     │         ├─ Success → route by intent (Dashboard or QR Scanner)
+   │     │         └─ Fail once → fall back to PIN entry
+   │     └─ No → show PIN entry directly
+   │
+   └─ Parent taps "Use password" → Password form
+```
+
+**States:**
+| State | Trigger |
+|---|---|
+| Default | Screen opens, biometric prompt fires |
+| PIN fallback | Biometric failed or unavailable |
+| Password fallback | Parent explicitly chooses it |
+| Network error | Can't reach auth server |
+
+**Forgot PIN flow:** Requires email verification — sends a reset link/code to the parent's registered email address. Handled in-app (not by center admin).
+
+**Lockout policy:** Deferred — to be decided later.
+
+---
+
+### 10.3 Dashboard Screen
+
+**Purpose:** "Things that need my attention" — action items summary.
+
+**Content inventory (priority order):**
+| Priority | Block | Content |
+|---|---|---|
+| 1 | Child status | Name, photo, checked in/out + time *(per child)* |
+| 2 | Incidents | List of unacknowledged incidents |
+| 3 | Action items | Forms pending count, Payment due amount |
+| 4 | Reminders | Sorted by urgency, max 3 + "See all" |
+| 5 | Fallback | "All caught up" → Activity feed bleeds in |
+
+**Entry points from Dashboard:**
+```
+Dashboard
+   ├─ Child status card       → tap → Time Card / Child Profile
+   ├─ Incident item            → tap → Incident detail (acknowledge inline)
+   ├─ Forms pill                → tap → Forms list
+   ├─ Payment pill               → tap → Payment screen
+   ├─ Reminder item               → tap → Relevant action (e.g. immunization record)
+   ├─ Header: Message icon         → tap → Messages tab
+   ├─ Header: QR icon               → tap → QR Scanner
+   └─ Header: Center switch          → tap → Center picker (bottom sheet)
+```
+
+**States:**
+| State | Behavior |
+|---|---|
+| Loading | Skeleton screens (shimmer placeholders in exact widget layout) |
+| All caught up | Warm message + activity feed bleed-in |
+| Has pending items | Sections render in priority order |
+| Multi-child | Status card per child; action widgets aggregate with child label per item |
+| Network error | **"Couldn't refresh" banner** at top — show cached/stale data below, not a blocking error screen |
+
+**Network error decision:** Stale-but-visible data with a subtle retry banner is better than a blocking error screen, since parents check this app for reassurance.
+
+---
+
+## 12. Performance Optimization
+
+### Problem
+Heavy dashboard with multiple API calls causes slow load after login. Feels broken.
+
+### Solution: Prefetch + Skeleton Screens + Priority Loading
+
+**Strategy 1 — Prefetch During Authentication:**
+Start all dashboard API calls the moment the login screen appears (before auth completes). By the time biometric/PIN succeeds and the transition animation plays, data is already loaded or loading.
+
+```
+App opens
+  → Login screen shows
+  → Dashboard API calls fire in background
+  → Parent authenticates (0.5–1 second)
+  → Dashboard renders with data already ready
+```
+
+**Strategy 2 — Skeleton Screens:**
+Never show a blank screen or spinner. Show shimmer placeholders in the exact layout of each widget immediately on navigation.
+
+**Strategy 3 — Priority Loading Order:**
+
+| Priority | Section | Reason |
+|---|---|---|
+| 1st | Child status card | Smallest payload, most critical |
+| 2nd | Incidents | Safety — never waits |
+| 3rd | Forms + Payment | Small data, action items |
+| 4th | Reminders | Slightly heavier |
+| Last | Activity feed | Acceptable 1–2 second delay |
+
+**Strategy 4 — Single Dashboard API Endpoint:**
+Replace multiple widget-level API calls with one consolidated endpoint returning all dashboard data. Cuts network round trips from 5+ to 1. Biggest backend win.
+
+**Combined result:**
+```
+Login screen → prefetch fires
+Auth completes → skeleton dashboard appears instantly
+~0.3s → child status + incidents fill in
+~0.8s → everything loaded
+Parent never sees a loading state
+```
+
+---
+
+## 13. Future Requirements
+
+| Feature | Notes |
+|---|---|
+| Center calendar & announcements | Separate "Announcements" feed from personal messages + monthly calendar view |
+| Developmental milestones | Observation timeline — teachers tag observations by type (social, motor, language), parent sees growth trends |
+
+---
+
+*Document created from 1core UX design session — June 2026*
