@@ -1,0 +1,1363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Teen Activities | 1Core Parent Portal</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.47.0/tabler-icons.min.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,opsz,wght@0,6..12,400;0,6..12,500;0,6..12,600;0,6..12,700;0,6..12,800;1,6..12,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --teal:#00B0AC;
+  --teal-dark:#00827F;
+  --teal-50:#E6F7F6;
+  --teal-100:#CCEFED;
+  --ink:#1A2B2A;
+  --ink-soft:#4A5A59;
+  --ink-faint:#7C8B8A;
+  --border:#E1E8E7;
+  --border-soft:#EDF2F1;
+  --bg:#F6F9F8;
+  --surface:#FFFFFF;
+  --success:#1A8754;
+  --success-bg:#E8F6EE;
+  --pending:#B8762B;
+  --pending-bg:#FCF2E3;
+  --info:#2D6FBF;
+  --info-bg:#E9F1FB;
+  --danger:#C0364A;
+  --danger-bg:#FBEAEE;
+  --full:#8A4F9E;
+  --full-bg:#F4EBF8;
+  --radius-sm:6px;
+  --radius-md:10px;
+  --radius-lg:16px;
+  --shadow-sm:0 1px 2px rgba(20,40,38,0.06);
+  --shadow-md:0 4px 16px rgba(20,40,38,0.08);
+  --shadow-lg:0 12px 40px rgba(20,40,38,0.16);
+  --space-1:4px;--space-2:8px;--space-3:12px;--space-4:16px;--space-5:20px;--space-6:24px;--space-8:32px;--space-10:40px;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{
+  font-family:'Nunito Sans',-apple-system,sans-serif;
+  background:var(--bg);
+  color:var(--ink);
+  line-height:1.45;
+  -webkit-font-smoothing:antialiased;
+}
+.app{max-width:980px;margin:0 auto;padding:var(--space-6) var(--space-5) var(--space-10);}
+
+/* ===== Header ===== */
+.portal-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:var(--space-6);}
+.brand{display:flex;align-items:center;gap:var(--space-2);font-weight:800;font-size:18px;color:var(--teal-dark);}
+.brand i{font-size:22px;}
+.header-actions{display:flex;align-items:center;gap:var(--space-3);}
+.icon-btn{
+  width:38px;height:38px;border-radius:50%;border:1px solid var(--border);
+  background:var(--surface);display:flex;align-items:center;justify-content:center;
+  color:var(--ink-soft);cursor:pointer;position:relative;font-size:17px;
+}
+.icon-btn:hover{background:var(--teal-50);color:var(--teal-dark);}
+.notif-dot{position:absolute;top:6px;right:7px;width:7px;height:7px;border-radius:50%;background:var(--danger);border:1.5px solid var(--surface);}
+
+.page-title-row{margin-bottom:var(--space-5);}
+.page-title{font-size:26px;font-weight:800;letter-spacing:-0.01em;}
+.page-sub{color:var(--ink-soft);font-size:14.5px;margin-top:2px;}
+
+/* ===== Top-level view tabs ===== */
+.view-tabs{display:flex;gap:var(--space-2);margin-bottom:var(--space-5);border-bottom:1px solid var(--border);}
+.view-tab{
+  padding:var(--space-3) var(--space-4);font-weight:700;font-size:14.5px;color:var(--ink-faint);
+  border-bottom:2.5px solid transparent;cursor:pointer;margin-bottom:-1px;display:flex;align-items:center;gap:6px;
+}
+.view-tab.active{color:var(--teal-dark);border-bottom-color:var(--teal);}
+.view-tab:hover:not(.active){color:var(--ink-soft);}
+.view-tab .pill-count{
+  background:var(--teal-100);color:var(--teal-dark);font-size:11.5px;font-weight:800;
+  padding:1px 7px;border-radius:10px;
+}
+
+.view{display:none;}
+.view.active{display:block;}
+
+/* ===== Activity card (Overview) ===== */
+.activity-section{margin-bottom:var(--space-6);}
+.activity-card{
+  background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);
+  padding:var(--space-5);box-shadow:var(--shadow-sm);
+}
+.activity-card-top{display:flex;justify-content:space-between;align-items:flex-start;gap:var(--space-4);margin-bottom:var(--space-4);}
+.activity-id{display:flex;align-items:center;gap:var(--space-3);}
+.activity-icon{
+  width:44px;height:44px;border-radius:var(--radius-md);display:flex;align-items:center;justify-content:center;
+  font-size:21px;flex-shrink:0;
+}
+.activity-icon.paid{background:var(--teal-50);color:var(--teal-dark);}
+.activity-icon.openrec{background:var(--info-bg);color:var(--info);}
+.activity-icon.trips{background:var(--full-bg);color:var(--full);}
+.activity-name{font-weight:800;font-size:17px;}
+.activity-type-tag{
+  font-size:11.5px;font-weight:700;color:var(--ink-faint);text-transform:uppercase;letter-spacing:0.03em;margin-top:2px;
+}
+.capacity-badge{
+  font-size:12.5px;font-weight:700;padding:5px 11px;border-radius:20px;white-space:nowrap;
+}
+.capacity-badge.open{background:var(--success-bg);color:var(--success);}
+.capacity-badge.limited{background:var(--pending-bg);color:var(--pending);}
+.capacity-badge.full{background:var(--full-bg);color:var(--full);}
+.capacity-badge.rolling{background:var(--info-bg);color:var(--info);}
+
+.activity-meta-grid{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:var(--space-4);
+  padding:var(--space-4) 0;border-top:1px solid var(--border-soft);border-bottom:1px solid var(--border-soft);margin-bottom:var(--space-4);
+}
+.meta-item{display:flex;flex-direction:column;gap:3px;}
+.meta-label{font-size:11.5px;font-weight:700;color:var(--ink-faint);text-transform:uppercase;letter-spacing:0.03em;}
+.meta-value{font-size:14px;font-weight:600;color:var(--ink);}
+.meta-value.dynamic{color:var(--info);display:flex;align-items:center;gap:4px;}
+.meta-value.dynamic i{font-size:13px;}
+
+.fee-breakdown{display:flex;flex-wrap:wrap;gap:var(--space-2);margin-bottom:var(--space-4);}
+.fee-chip{
+  background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:6px 11px;
+  font-size:12.5px;font-weight:600;color:var(--ink-soft);display:flex;align-items:center;gap:6px;
+}
+.fee-chip strong{color:var(--ink);font-weight:800;}
+.fee-chip.free{background:var(--success-bg);border-color:transparent;color:var(--success);}
+
+.activity-card-footer{display:flex;justify-content:space-between;align-items:center;gap:var(--space-3);}
+.enrollment-snippet{font-size:13px;color:var(--ink-soft);display:flex;align-items:center;gap:6px;}
+.enrollment-snippet i{font-size:14px;color:var(--ink-faint);}
+.enrollment-snippet .child-pill-mini{
+  display:inline-flex;align-items:center;gap:4px;background:var(--teal-50);color:var(--teal-dark);
+  font-weight:700;padding:2px 8px;border-radius:12px;font-size:12px;
+}
+
+.btn{
+  border:none;border-radius:var(--radius-sm);font-weight:700;font-size:14px;cursor:pointer;
+  padding:10px 18px;display:inline-flex;align-items:center;gap:6px;transition:all .15s ease;white-space:nowrap;
+}
+.btn-primary{background:var(--teal);color:#fff;}
+.btn-primary:hover{background:var(--teal-dark);}
+.btn-waitlist{background:var(--full);color:#fff;}
+.btn-waitlist:hover{background:#723988;}
+.btn-secondary{background:var(--surface);color:var(--ink);border:1px solid var(--border);}
+.btn-secondary:hover{background:var(--bg);}
+.btn-text{background:transparent;color:var(--teal-dark);padding:8px 4px;}
+.btn-text:hover{text-decoration:underline;}
+.btn-danger-text{background:transparent;color:var(--danger);padding:8px 4px;font-weight:700;}
+.btn-danger-text:hover{text-decoration:underline;}
+.btn:disabled{opacity:0.5;cursor:not-allowed;}
+.btn-sm{padding:7px 13px;font-size:13px;}
+.btn-full{width:100%;justify-content:center;}
+
+/* ===== Status pills ===== */
+.status-pill{
+  display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:800;
+  padding:4px 10px;border-radius:20px;text-transform:none;
+}
+.status-pill::before{content:'';width:6px;height:6px;border-radius:50%;}
+.status-pill.enrolled{background:var(--success-bg);color:var(--success);}
+.status-pill.enrolled::before{background:var(--success);}
+.status-pill.pending{background:var(--pending-bg);color:var(--pending);}
+.status-pill.pending::before{background:var(--pending);}
+.status-pill.waitlisted{background:var(--info-bg);color:var(--info);}
+.status-pill.waitlisted::before{background:var(--info);}
+.status-pill.withdrawn{background:var(--border-soft);color:var(--ink-faint);}
+.status-pill.withdrawn::before{background:var(--ink-faint);}
+
+/* ===== Dashboard (per-child management) ===== */
+.dash-filter-row{display:flex;gap:var(--space-2);margin-bottom:var(--space-5);flex-wrap:wrap;}
+.filter-chip{
+  padding:7px 14px;border-radius:20px;border:1px solid var(--border);background:var(--surface);
+  font-size:13px;font-weight:700;color:var(--ink-soft);cursor:pointer;
+}
+.filter-chip.active{background:var(--ink);color:#fff;border-color:var(--ink);}
+
+.program-card{
+  background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);
+  box-shadow:var(--shadow-sm);margin-bottom:var(--space-5);overflow:hidden;
+}
+.program-card-top{
+  display:flex;align-items:center;gap:var(--space-5);padding:var(--space-5) var(--space-6);
+  flex-wrap:wrap;
+}
+.pc-child{display:flex;align-items:center;gap:var(--space-3);min-width:160px;}
+.pc-avatar{
+  width:46px;height:46px;border-radius:50%;background:var(--teal);color:#fff;
+  display:flex;align-items:center;justify-content:center;font-weight:800;font-size:16px;flex-shrink:0;
+}
+.pc-child-name{font-weight:800;font-size:15.5px;}
+.pc-child-age{font-size:12.5px;color:var(--ink-faint);font-weight:600;}
+
+.pc-divider{width:1px;height:40px;background:var(--border);flex-shrink:0;}
+
+.pc-activity{min-width:160px;flex:1;}
+.pc-activity-name{font-weight:800;font-size:15.5px;}
+.pc-activity-type{font-size:12.5px;color:var(--ink-faint);font-weight:600;margin-top:1px;}
+
+.pc-fields{display:flex;gap:var(--space-8);flex-wrap:wrap;align-items:flex-start;}
+.pc-field{display:flex;flex-direction:column;gap:2px;}
+.pc-field-label{font-size:10.5px;font-weight:700;color:var(--ink-faint);text-transform:uppercase;letter-spacing:0.05em;}
+.pc-field-value{font-size:14px;font-weight:700;color:var(--ink);}
+
+.pc-details-section{
+  border-top:1px solid var(--border);padding:var(--space-4) var(--space-6);
+}
+.pc-details-header{
+  display:flex;justify-content:space-between;align-items:center;margin-bottom:var(--space-3);
+}
+.pc-details-title{
+  font-size:11.5px;font-weight:800;color:var(--ink-faint);text-transform:uppercase;letter-spacing:0.05em;
+  display:flex;align-items:center;gap:6px;
+}
+.pc-details-title i{font-size:14px;}
+.pc-details-link{font-size:13px;font-weight:700;color:var(--teal-dark);cursor:pointer;display:flex;align-items:center;gap:4px;}
+.pc-details-link:hover{text-decoration:underline;}
+.pc-details-link i{font-size:14px;}
+
+.pc-table{width:100%;border-collapse:collapse;}
+.pc-table thead th{
+  font-size:10.5px;font-weight:700;color:var(--ink-faint);text-transform:uppercase;letter-spacing:0.05em;
+  padding:8px 12px 8px 0;text-align:left;border-bottom:1px solid var(--border);
+}
+.pc-table tbody tr{background:var(--teal-50);background:rgba(230,247,246,0.4);}
+.pc-table tbody tr:nth-child(even){background:rgba(230,247,246,0.15);}
+.pc-table tbody td{padding:10px 12px 10px 0;font-size:13.5px;font-weight:600;color:var(--ink);}
+.pc-table .type-badge{
+  display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:700;
+  padding:3px 10px;border-radius:12px;
+}
+.pc-table .type-badge::before{content:'';width:6px;height:6px;border-radius:50%;}
+.type-badge.status-enrolled{background:var(--success-bg);color:var(--success);}
+.type-badge.status-enrolled::before{background:var(--success);}
+.type-badge.status-pending{background:var(--pending-bg);color:var(--pending);}
+.type-badge.status-pending::before{background:var(--pending);}
+.type-badge.status-waitlisted{background:var(--info-bg);color:var(--info);}
+.type-badge.status-waitlisted::before{background:var(--info);}
+.type-badge.type-percentage{background:var(--success-bg);color:var(--success);}
+.type-badge.type-percentage::before{background:var(--success);}
+.type-badge.type-fixed{background:var(--info-bg);color:var(--info);}
+.type-badge.type-fixed::before{background:var(--info);}
+
+.pc-actions{
+  border-top:1px solid var(--border);padding:var(--space-3) var(--space-6);
+  display:flex;justify-content:flex-end;gap:var(--space-3);
+}
+
+.waitlist-position{font-size:12px;color:var(--info);font-weight:700;}
+
+@media(max-width:640px){
+  .program-card-top{flex-direction:column;gap:var(--space-3);padding:var(--space-4);}
+  .pc-divider{width:100%;height:1px;}
+  .pc-fields{gap:var(--space-4);}
+  .pc-details-section{padding:var(--space-3) var(--space-4);}
+  .pc-actions{padding:var(--space-3) var(--space-4);}
+  .pc-table{display:block;overflow-x:auto;}
+}
+
+/* ===== Promotion banner ===== */
+.promo-banner{
+  background:var(--teal-50);border:1px solid var(--teal-100);border-radius:var(--radius-md);
+  padding:var(--space-4);margin-bottom:var(--space-5);display:flex;gap:var(--space-3);align-items:flex-start;
+}
+.promo-banner i{color:var(--teal-dark);font-size:20px;margin-top:1px;flex-shrink:0;}
+.promo-banner-title{font-weight:800;font-size:14.5px;color:var(--teal-dark);margin-bottom:2px;}
+.promo-banner-text{font-size:13.5px;color:var(--ink-soft);}
+
+/* ===== Activity log ===== */
+.activity-log{
+  background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-md);
+  padding:var(--space-4);margin-top:var(--space-2);
+}
+.log-title{font-size:12.5px;font-weight:800;color:var(--ink-faint);text-transform:uppercase;letter-spacing:0.03em;margin-bottom:var(--space-3);}
+.log-entry{display:flex;gap:var(--space-3);padding:var(--space-2) 0;font-size:13px;}
+.log-entry:not(:last-child){border-bottom:1px solid var(--border-soft);}
+.log-dot{width:8px;height:8px;border-radius:50%;margin-top:5px;flex-shrink:0;}
+.log-dot.success{background:var(--success);}
+.log-dot.pending{background:var(--pending);}
+.log-dot.info{background:var(--info);}
+.log-dot.neutral{background:var(--ink-faint);}
+.log-text{color:var(--ink);}
+.log-time{color:var(--ink-faint);font-size:12px;display:block;margin-top:1px;}
+
+/* ===== Modal ===== */
+.modal-overlay{
+  position:fixed;inset:0;background:rgba(20,40,38,0.45);display:none;align-items:center;justify-content:center;
+  z-index:100;padding:var(--space-4);
+}
+.modal-overlay.open{display:flex;}
+.modal{
+  background:var(--surface);border-radius:var(--radius-lg);width:100%;max-width:560px;max-height:88vh;
+  display:flex;flex-direction:column;box-shadow:var(--shadow-lg);
+}
+.modal-header{
+  padding:var(--space-5);border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:flex-start;
+}
+.modal-title-group .modal-eyebrow{font-size:11.5px;font-weight:700;color:var(--teal-dark);text-transform:uppercase;letter-spacing:0.03em;margin-bottom:4px;}
+.modal-title{font-size:19px;font-weight:800;}
+.modal-close{
+  background:transparent;border:none;font-size:20px;color:var(--ink-faint);cursor:pointer;
+  width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+}
+.modal-close:hover{background:var(--bg);}
+.modal-body{padding:var(--space-5);overflow-y:auto;flex:1;}
+.modal-footer{padding:var(--space-4) var(--space-5);border-top:1px solid var(--border);display:flex;justify-content:flex-end;gap:var(--space-3);}
+
+/* ===== Steps indicator ===== */
+.step-indicator{display:flex;align-items:center;gap:6px;margin-bottom:var(--space-5);}
+.step-dot{flex:1;height:4px;border-radius:2px;background:var(--border);}
+.step-dot.done{background:var(--teal);}
+.step-dot.current{background:var(--teal-100);position:relative;overflow:hidden;}
+.step-dot.current::after{content:'';position:absolute;left:0;top:0;bottom:0;width:50%;background:var(--teal);}
+
+.form-group{margin-bottom:var(--space-4);}
+.form-label{display:block;font-size:13px;font-weight:700;color:var(--ink-soft);margin-bottom:6px;}
+.child-select-list{display:flex;flex-direction:column;gap:var(--space-2);}
+.child-select-card{
+  display:flex;align-items:center;gap:var(--space-3);padding:var(--space-3);border:1.5px solid var(--border);
+  border-radius:var(--radius-md);cursor:pointer;
+}
+.child-select-card.selected{border-color:var(--teal);background:var(--teal-50);}
+.child-select-card input{width:18px;height:18px;accent-color:var(--teal);}
+.child-select-meta{flex:1;}
+.child-select-name{font-weight:700;font-size:14.5px;}
+.child-select-grade{font-size:12px;color:var(--ink-faint);}
+.eligibility-flag{font-size:11.5px;font-weight:700;color:var(--danger);background:var(--danger-bg);padding:2px 8px;border-radius:10px;}
+
+.schedule-summary{
+  background:var(--bg);border-radius:var(--radius-md);padding:var(--space-4);margin-bottom:var(--space-4);
+}
+.schedule-row{display:flex;justify-content:space-between;padding:6px 0;font-size:13.5px;}
+.schedule-row:not(:last-child){border-bottom:1px solid var(--border-soft);}
+.schedule-row .label{color:var(--ink-soft);font-weight:600;}
+.schedule-row .value{font-weight:700;}
+
+.fee-line{display:flex;justify-content:space-between;padding:8px 0;font-size:14px;}
+.fee-line:not(:last-child){border-bottom:1px solid var(--border-soft);}
+.fee-line .fee-name{font-weight:600;}
+.fee-line .fee-note{font-size:11.5px;color:var(--ink-faint);display:block;margin-top:1px;}
+.fee-total-line{display:flex;justify-content:space-between;padding-top:var(--space-3);margin-top:var(--space-2);border-top:2px solid var(--border);font-weight:800;font-size:15.5px;}
+
+.input{
+  width:100%;padding:10px 12px;border:1.5px solid var(--border);border-radius:var(--radius-sm);
+  font-family:inherit;font-size:14px;color:var(--ink);
+}
+.input:focus{outline:none;border-color:var(--teal);}
+.input-row{display:grid;grid-template-columns:1fr 1fr;gap:var(--space-3);}
+
+.approval-note{
+  display:flex;gap:var(--space-3);background:var(--pending-bg);border-radius:var(--radius-md);padding:var(--space-4);margin-top:var(--space-4);
+}
+.approval-note i{color:var(--pending);font-size:18px;margin-top:1px;}
+.approval-note-text{font-size:13px;color:#7a5420;}
+.approval-note-text strong{display:block;margin-bottom:2px;color:var(--pending);}
+
+.success-state{text-align:center;padding:var(--space-6) var(--space-4);}
+.success-icon{
+  width:64px;height:64px;border-radius:50%;background:var(--success-bg);color:var(--success);
+  display:flex;align-items:center;justify-content:center;font-size:30px;margin:0 auto var(--space-4);
+}
+.success-icon.pending-icon{background:var(--pending-bg);color:var(--pending);}
+.success-title{font-size:18px;font-weight:800;margin-bottom:6px;}
+.success-text{font-size:14px;color:var(--ink-soft);max-width:380px;margin:0 auto;}
+
+/* Confirm withdraw modal */
+.withdraw-warning{
+  background:var(--danger-bg);border-radius:var(--radius-md);padding:var(--space-4);font-size:13.5px;color:#7a2030;
+  display:flex;gap:var(--space-3);margin-bottom:var(--space-2);
+}
+.withdraw-warning i{color:var(--danger);font-size:18px;flex-shrink:0;margin-top:1px;}
+
+.toast-stack{position:fixed;top:20px;right:20px;z-index:200;display:flex;flex-direction:column;gap:10px;}
+.toast{
+  background:var(--ink);color:#fff;padding:13px 18px;border-radius:var(--radius-md);font-size:13.5px;font-weight:600;
+  box-shadow:var(--shadow-lg);display:flex;align-items:center;gap:10px;min-width:280px;
+  animation:toastIn .25s ease;
+}
+.toast i{color:var(--teal);font-size:16px;}
+@keyframes toastIn{from{opacity:0;transform:translateY(-8px);}to{opacity:1;transform:translateY(0);}}
+
+@media (max-width:640px){
+  .activity-meta-grid{grid-template-columns:1fr 1fr;}
+  .input-row{grid-template-columns:1fr;}
+  .activity-card-footer{flex-direction:column;align-items:stretch;}
+  .activity-card-footer .btn{width:100%;justify-content:center;}
+  .program-card-top{flex-direction:column;gap:var(--space-3);padding:var(--space-4);}
+  .pc-divider{width:100%;height:1px;}
+  .pc-fields{gap:var(--space-4);}
+  .pc-details-section,.pc-actions{padding-left:var(--space-4);padding-right:var(--space-4);}
+  .pc-table{display:block;overflow-x:auto;}
+}
+</style>
+</head>
+<body>
+
+<div class="toast-stack" id="toastStack"></div>
+
+<div class="app">
+
+  <div class="portal-header">
+    <div class="brand"><i class="ti ti-shield-heart"></i>1Core</div>
+    <div class="header-actions">
+      <div class="icon-btn"><i class="ti ti-bell"></i><span class="notif-dot"></span></div>
+      <div class="icon-btn"><i class="ti ti-user"></i></div>
+    </div>
+  </div>
+
+  <div class="page-title-row">
+    <div class="page-title">Teen Activities</div>
+    <div class="page-sub">Register your teens and manage enrollment across all programs.</div>
+  </div>
+
+  <div class="view-tabs">
+    <div class="view-tab active" data-view="overview" onclick="switchView('overview')">
+      <i class="ti ti-list-details"></i> All Activities
+    </div>
+    <div class="view-tab" data-view="manage" onclick="switchView('manage')">
+      <i class="ti ti-users"></i> My Children's Status
+      <span class="pill-count" id="activeCount">3</span>
+    </div>
+  </div>
+
+  <!-- ============ OVERVIEW VIEW ============ -->
+  <div class="view active" id="view-overview">
+
+    <!-- Teen Paid Activity -->
+    <div class="activity-section">
+      <div class="activity-card">
+        <div class="activity-card-top">
+          <div class="activity-id">
+            <div class="activity-icon paid"><i class="ti ti-ticket"></i></div>
+            <div>
+              <div class="activity-name">Teen Strength & Conditioning Club</div>
+              <div class="activity-type-tag">Teen Paid Activity</div>
+            </div>
+          </div>
+          <span class="capacity-badge limited" id="paidCapacityBadge">6 of 20 spots left</span>
+        </div>
+
+        <div class="activity-meta-grid">
+          <div class="meta-item">
+            <span class="meta-label">Schedule</span>
+            <span class="meta-value">Tue & Thu, 4:30–5:30 PM</span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-label">Session dates</span>
+            <span class="meta-value">Aug 11 – Oct 17</span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-label">Approval</span>
+            <span class="meta-value">Director review required</span>
+          </div>
+        </div>
+
+        <div class="fee-breakdown">
+          <div class="fee-chip"><strong>$145</strong> session fee</div>
+          <div class="fee-chip"><strong>$15</strong> equipment fee</div>
+        </div>
+
+        <div class="activity-card-footer">
+          <div class="enrollment-snippet">
+            <i class="ti ti-info-circle"></i> 1 of your teens registered
+            <span class="child-pill-mini"><i class="ti ti-circle-filled" style="font-size:6px;"></i> Marcus</span>
+          </div>
+          <button class="btn btn-primary" onclick="openRegModal('paid')">
+            <i class="ti ti-circle-plus"></i> Register a Teen
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Teen Open Rec Activity -->
+    <div class="activity-section">
+      <div class="activity-card">
+        <div class="activity-card-top">
+          <div class="activity-id">
+            <div class="activity-icon openrec"><i class="ti ti-basketball"></i></div>
+            <div>
+              <div class="activity-name">Teen Open Rec</div>
+              <div class="activity-type-tag">Teen Open Rec Activity</div>
+            </div>
+          </div>
+          <span class="capacity-badge rolling">Open enrollment · no waitlist</span>
+        </div>
+
+        <div class="activity-meta-grid">
+          <div class="meta-item">
+            <span class="meta-label">Schedule</span>
+            <span class="meta-value dynamic"><i class="ti ti-refresh"></i> Varies weekly — see calendar</span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-label">Registration period</span>
+            <span class="meta-value">Open through Nov 30</span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-label">Approval</span>
+            <span class="meta-value">None — instant enrollment</span>
+          </div>
+        </div>
+
+        <div class="fee-breakdown">
+          <div class="fee-chip free"><i class="ti ti-check"></i> Free to join</div>
+        </div>
+
+        <div class="activity-card-footer">
+          <div class="enrollment-snippet">
+            <i class="ti ti-info-circle"></i> Days/times change week to week — check before each session
+          </div>
+          <button class="btn btn-primary" onclick="openRegModal('openrec')">
+            <i class="ti ti-circle-plus"></i> Enroll a Teen
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Teen Trips & Tours -->
+    <div class="activity-section">
+      <div class="activity-card">
+        <div class="activity-card-top">
+          <div class="activity-id">
+            <div class="activity-icon trips"><i class="ti ti-bus"></i></div>
+            <div>
+              <div class="activity-name">Fall Teen Trip: Adventure Park & Lake Day</div>
+              <div class="activity-type-tag">Teen Trips & Tours</div>
+            </div>
+          </div>
+          <span class="capacity-badge full" id="tripsCapacityBadge">Full — waitlist open</span>
+        </div>
+
+        <div class="activity-meta-grid">
+          <div class="meta-item">
+            <span class="meta-label">Trip date</span>
+            <span class="meta-value">Saturday, Sep 13</span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-label">Departs / returns</span>
+            <span class="meta-value">8:00 AM – 6:00 PM</span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-label">Approval</span>
+            <span class="meta-value">Director review required</span>
+          </div>
+        </div>
+
+        <div class="fee-breakdown">
+          <div class="fee-chip"><strong>$40</strong> admission</div>
+          <div class="fee-chip"><strong>$18</strong> transportation</div>
+          <div class="fee-chip"><strong>$12</strong> meal voucher</div>
+        </div>
+
+        <div class="activity-card-footer">
+          <div class="enrollment-snippet">
+            <i class="ti ti-info-circle"></i> No registrations yet for this trip
+          </div>
+          <button class="btn btn-waitlist" onclick="openRegModal('trips')">
+            <i class="ti ti-clock-hour-4"></i> Join Waitlist
+          </button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ============ MANAGE / STATUS VIEW ============ -->
+  <div class="view" id="view-manage">
+
+    <div class="promo-banner" id="promoBanner">
+      <i class="ti ti-arrow-up-circle"></i>
+      <div>
+        <div class="promo-banner-title">A spot opened up on the waitlist</div>
+        <div class="promo-banner-text">Since a registration was withdrawn from <strong>Fall Teen Trip: Adventure Park & Lake Day</strong>, the next waitlisted teen will be automatically promoted within <strong>48 hours</strong> if the spot remains open. You'll get a status update here the moment it changes.</div>
+      </div>
+    </div>
+
+    <div class="dash-filter-row">
+      <div class="filter-chip active" data-filter="all" onclick="setFilter('all')">All statuses</div>
+      <div class="filter-chip" data-filter="enrolled" onclick="setFilter('enrolled')">Enrolled</div>
+      <div class="filter-chip" data-filter="pending" onclick="setFilter('pending')">Waiting for Approval</div>
+      <div class="filter-chip" data-filter="waitlisted" onclick="setFilter('waitlisted')">Waitlisted</div>
+    </div>
+
+    <!-- Marcus — Strength & Conditioning -->
+    <div class="program-card" data-status="pending">
+      <div class="program-card-top">
+        <div class="pc-child">
+          <div class="pc-avatar">M</div>
+          <div>
+            <div class="pc-child-name">Marcus T.</div>
+            <div class="pc-child-age">Age: 15</div>
+          </div>
+        </div>
+        <div class="pc-divider"></div>
+        <div class="pc-activity">
+          <div class="pc-activity-name">Teen Strength & Conditioning Club</div>
+          <div class="pc-activity-type">Teen Paid Activity</div>
+        </div>
+        <div class="pc-fields">
+          <div class="pc-field">
+            <span class="pc-field-label">Schedule</span>
+            <span class="pc-field-value">Tue & Thu</span>
+          </div>
+          <div class="pc-field">
+            <span class="pc-field-label">Session Dates</span>
+            <span class="pc-field-value">Aug 11 – Oct 17</span>
+          </div>
+          <div class="pc-field">
+            <span class="pc-field-label">Program Fee</span>
+            <span class="pc-field-value">$160.00</span>
+          </div>
+        </div>
+      </div>
+      <div class="pc-details-section">
+        <div class="pc-details-header">
+          <div class="pc-details-title"><i class="ti ti-tag"></i> Fees Applied (2)</div>
+          <div class="pc-details-link" onclick="openDetailModal('marcus-paid')"><i class="ti ti-external-link"></i> Full details</div>
+        </div>
+        <table class="pc-table">
+          <thead>
+            <tr>
+              <th>Fee</th>
+              <th>Type</th>
+              <th>Amount</th>
+              <th>Status</th>
+              <th>Submitted</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Session fee</td>
+              <td><span class="type-badge type-percentage">Session</span></td>
+              <td>$145.00</td>
+              <td>Authorized</td>
+              <td>Yesterday, 4:02 PM</td>
+            </tr>
+            <tr>
+              <td>Equipment fee</td>
+              <td><span class="type-badge type-fixed">One-time</span></td>
+              <td>$15.00</td>
+              <td>Authorized</td>
+              <td>Yesterday, 4:02 PM</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="pc-actions">
+        <span class="status-pill pending">Waiting for Approval</span>
+        <button class="btn btn-secondary btn-sm" onclick="openDetailModal('marcus-paid')">Details</button>
+      </div>
+    </div>
+
+    <!-- Marcus — Open Rec -->
+    <div class="program-card" data-status="enrolled">
+      <div class="program-card-top">
+        <div class="pc-child">
+          <div class="pc-avatar">M</div>
+          <div>
+            <div class="pc-child-name">Marcus T.</div>
+            <div class="pc-child-age">Age: 15</div>
+          </div>
+        </div>
+        <div class="pc-divider"></div>
+        <div class="pc-activity">
+          <div class="pc-activity-name">Teen Open Rec</div>
+          <div class="pc-activity-type">Teen Open Rec Activity</div>
+        </div>
+        <div class="pc-fields">
+          <div class="pc-field">
+            <span class="pc-field-label">This Week</span>
+            <span class="pc-field-value">Wed, 3:30–5:00 PM</span>
+          </div>
+          <div class="pc-field">
+            <span class="pc-field-label">Registration</span>
+            <span class="pc-field-value">Open through Nov 30</span>
+          </div>
+          <div class="pc-field">
+            <span class="pc-field-label">Program Fee</span>
+            <span class="pc-field-value">Free</span>
+          </div>
+        </div>
+      </div>
+      <div class="pc-details-section">
+        <div class="pc-details-header">
+          <div class="pc-details-title"><i class="ti ti-tag"></i> Enrollment Info</div>
+        </div>
+        <table class="pc-table">
+          <thead>
+            <tr>
+              <th>Detail</th>
+              <th>Type</th>
+              <th>Cost</th>
+              <th>Enrolled</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Weekly open recreation</td>
+              <td><span class="type-badge status-enrolled">Active</span></td>
+              <td>Free</td>
+              <td>Jun 18, 11:28 AM</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="pc-actions">
+        <span class="status-pill enrolled">Enrolled</span>
+        <button class="btn btn-danger-text btn-sm" onclick="openWithdrawModal('marcus-openrec','Teen Open Rec','Marcus')">Withdraw</button>
+      </div>
+    </div>
+
+    <!-- Sofia — Fall Trip -->
+    <div class="program-card" data-status="waitlisted">
+      <div class="program-card-top">
+        <div class="pc-child">
+          <div class="pc-avatar">S</div>
+          <div>
+            <div class="pc-child-name">Sofia T.</div>
+            <div class="pc-child-age">Age: 13</div>
+          </div>
+        </div>
+        <div class="pc-divider"></div>
+        <div class="pc-activity">
+          <div class="pc-activity-name">Fall Teen Trip: Adventure Park & Lake Day</div>
+          <div class="pc-activity-type">Teen Trips & Tours</div>
+        </div>
+        <div class="pc-fields">
+          <div class="pc-field">
+            <span class="pc-field-label">Trip Date</span>
+            <span class="pc-field-value">Sat, Sep 13</span>
+          </div>
+          <div class="pc-field">
+            <span class="pc-field-label">Departs / Returns</span>
+            <span class="pc-field-value">8:00 AM – 6:00 PM</span>
+          </div>
+          <div class="pc-field">
+            <span class="pc-field-label">Program Fee</span>
+            <span class="pc-field-value">$70.00</span>
+          </div>
+        </div>
+      </div>
+      <div class="pc-details-section">
+        <div class="pc-details-header">
+          <div class="pc-details-title"><i class="ti ti-tag"></i> Fee Breakdown (3)</div>
+          <div class="pc-details-link"><i class="ti ti-clock-hour-4"></i> Waitlist position: 2 of 4</div>
+        </div>
+        <table class="pc-table">
+          <thead>
+            <tr>
+              <th>Fee</th>
+              <th>Type</th>
+              <th>Amount</th>
+              <th>Submitted</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Admission</td>
+              <td><span class="type-badge type-percentage">Park entry</span></td>
+              <td>$40.00</td>
+              <td>Today, 9:14 AM</td>
+            </tr>
+            <tr>
+              <td>Transportation</td>
+              <td><span class="type-badge type-fixed">Charter bus</span></td>
+              <td>$18.00</td>
+              <td>Today, 9:14 AM</td>
+            </tr>
+            <tr>
+              <td>Meal voucher</td>
+              <td><span class="type-badge type-fixed">On-site lunch</span></td>
+              <td>$12.00</td>
+              <td>Today, 9:14 AM</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="pc-actions">
+        <span class="status-pill waitlisted">Waitlisted</span>
+        <button class="btn btn-danger-text btn-sm" onclick="openWithdrawModal('sofia-trips','Fall Teen Trip: Adventure Park & Lake Day','Sofia')">Leave Waitlist</button>
+      </div>
+    </div>
+
+    <!-- Sofia — Open Rec -->
+    <div class="program-card" data-status="enrolled">
+      <div class="program-card-top">
+        <div class="pc-child">
+          <div class="pc-avatar">S</div>
+          <div>
+            <div class="pc-child-name">Sofia T.</div>
+            <div class="pc-child-age">Age: 13</div>
+          </div>
+        </div>
+        <div class="pc-divider"></div>
+        <div class="pc-activity">
+          <div class="pc-activity-name">Teen Open Rec</div>
+          <div class="pc-activity-type">Teen Open Rec Activity</div>
+        </div>
+        <div class="pc-fields">
+          <div class="pc-field">
+            <span class="pc-field-label">This Week</span>
+            <span class="pc-field-value">Wed, 3:30–5:00 PM</span>
+          </div>
+          <div class="pc-field">
+            <span class="pc-field-label">Registration</span>
+            <span class="pc-field-value">Open through Nov 30</span>
+          </div>
+          <div class="pc-field">
+            <span class="pc-field-label">Program Fee</span>
+            <span class="pc-field-value">Free</span>
+          </div>
+        </div>
+      </div>
+      <div class="pc-details-section">
+        <div class="pc-details-header">
+          <div class="pc-details-title"><i class="ti ti-tag"></i> Enrollment Info</div>
+        </div>
+        <table class="pc-table">
+          <thead>
+            <tr>
+              <th>Detail</th>
+              <th>Type</th>
+              <th>Cost</th>
+              <th>Enrolled</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Weekly open recreation</td>
+              <td><span class="type-badge status-enrolled">Active</span></td>
+              <td>Free</td>
+              <td>Jun 18, 11:30 AM</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="pc-actions">
+        <span class="status-pill enrolled">Enrolled</span>
+        <button class="btn btn-danger-text btn-sm" onclick="openWithdrawModal('sofia-openrec','Teen Open Rec','Sofia')">Withdraw</button>
+      </div>
+    </div>
+
+    <div class="activity-log">
+      <div class="log-title">Recent Activity</div>
+      <div id="logEntries">
+        <div class="log-entry">
+          <div class="log-dot info"></div>
+          <div>
+            <div class="log-text">Sofia T. added to waitlist for <strong>Fall Teen Trip: Adventure Park & Lake Day</strong> — position 2 of 4</div>
+            <span class="log-time">Today, 9:14 AM</span>
+          </div>
+        </div>
+        <div class="log-entry">
+          <div class="log-dot pending"></div>
+          <div>
+            <div class="log-text">Marcus T.'s registration for <strong>Teen Strength & Conditioning Club</strong> submitted — awaiting director approval</div>
+            <span class="log-time">Yesterday, 4:02 PM</span>
+          </div>
+        </div>
+        <div class="log-entry">
+          <div class="log-dot success"></div>
+          <div>
+            <div class="log-text">Sofia T. enrolled in <strong>Teen Open Rec</strong></div>
+            <span class="log-time">Jun 18, 11:30 AM</span>
+          </div>
+        </div>
+        <div class="log-entry">
+          <div class="log-dot success"></div>
+          <div>
+            <div class="log-text">Marcus T. enrolled in <strong>Teen Open Rec</strong></div>
+            <span class="log-time">Jun 18, 11:28 AM</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+<!-- ============ REGISTRATION MODAL ============ -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal" id="modalContent"></div>
+</div>
+
+<script>
+const state = {
+  filter: 'all',
+  paidSpotsLeft: 6,
+  tripFull: true,
+};
+
+function switchView(view){
+  document.querySelectorAll('.view-tab').forEach(t=>t.classList.toggle('active', t.dataset.view===view));
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+  document.getElementById('view-'+view).classList.add('active');
+}
+
+function setFilter(f){
+  state.filter = f;
+  document.querySelectorAll('.filter-chip').forEach(c=>c.classList.toggle('active', c.dataset.filter===f));
+  document.querySelectorAll('.program-card').forEach(card=>{
+    card.style.display = (f==='all' || card.dataset.status===f) ? 'block' : 'none';
+  });
+}
+
+function showToast(text, icon='circle-check'){
+  const stack = document.getElementById('toastStack');
+  const t = document.createElement('div');
+  t.className = 'toast';
+  t.innerHTML = `<i class="ti ti-${icon}"></i><span>${text}</span>`;
+  stack.appendChild(t);
+  setTimeout(()=>{ t.style.opacity='0'; t.style.transition='opacity .3s'; setTimeout(()=>t.remove(),300); }, 3200);
+}
+
+function closeModal(){
+  document.getElementById('modalOverlay').classList.remove('open');
+}
+
+document.getElementById('modalOverlay').addEventListener('click', (e)=>{
+  if(e.target.id==='modalOverlay') closeModal();
+});
+
+/* ===================== REGISTRATION FLOWS ===================== */
+
+function openRegModal(type){
+  const modal = document.getElementById('modalContent');
+  if(type==='paid') modal.innerHTML = paidStep1();
+  if(type==='openrec') modal.innerHTML = openRecStep1();
+  if(type==='trips') modal.innerHTML = tripsStep1();
+  document.getElementById('modalOverlay').classList.add('open');
+}
+
+/* ---- TEEN PAID ACTIVITY: 3 steps — child select, schedule review, payment ---- */
+function paidStep1(){
+  return `
+  <div class="modal-header">
+    <div class="modal-title-group">
+      <div class="modal-eyebrow">Teen Paid Activity</div>
+      <div class="modal-title">Select a Teen</div>
+    </div>
+    <button class="modal-close" onclick="closeModal()"><i class="ti ti-x"></i></button>
+  </div>
+  <div class="modal-body">
+    <div class="step-indicator">
+      <div class="step-dot current"></div><div class="step-dot"></div><div class="step-dot"></div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Teen Strength & Conditioning Club — choose who's registering</label>
+      <div class="child-select-list" id="childList">
+        <label class="child-select-card" onclick="selectChild(this)">
+          <input type="radio" name="childPick" value="sofia">
+          <div class="child-select-meta">
+            <div class="child-select-name">Sofia T.</div>
+            <div class="child-select-grade">Age 13</div>
+          </div>
+        </label>
+        <label class="child-select-card" onclick="selectChild(this)">
+          <input type="radio" name="childPick" value="kai">
+          <div class="child-select-meta">
+            <div class="child-select-name">Kai T.</div>
+            <div class="child-select-grade">Age 16</div>
+          </div>
+        </label>
+      </div>
+    </div>
+    <div class="approval-note">
+      <i class="ti ti-info-circle"></i>
+      <div class="approval-note-text">
+        <strong>Director approval required</strong>
+        Your registration will be submitted as "Waiting for Approval" until a director reviews and confirms the spot.
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+    <button class="btn btn-primary" id="paidNext1" disabled onclick="renderPaidStep2()">Continue <i class="ti ti-arrow-right"></i></button>
+  </div>`;
+}
+
+function selectChild(el){
+  document.querySelectorAll('#childList .child-select-card').forEach(c=>c.classList.remove('selected'));
+  el.classList.add('selected');
+  el.querySelector('input').checked = true;
+  const nextBtn = document.getElementById('paidNext1') || document.getElementById('tripsNext1') || document.getElementById('orNext1');
+  if(nextBtn) nextBtn.disabled = false;
+}
+
+function renderPaidStep2(){
+  document.getElementById('modalContent').innerHTML = `
+  <div class="modal-header">
+    <div class="modal-title-group">
+      <div class="modal-eyebrow">Teen Paid Activity</div>
+      <div class="modal-title">Confirm Schedule</div>
+    </div>
+    <button class="modal-close" onclick="closeModal()"><i class="ti ti-x"></i></button>
+  </div>
+  <div class="modal-body">
+    <div class="step-indicator">
+      <div class="step-dot done"></div><div class="step-dot current"></div><div class="step-dot"></div>
+    </div>
+    <div class="schedule-summary">
+      <div class="schedule-row"><span class="label">Activity</span><span class="value">Teen Strength & Conditioning Club</span></div>
+      <div class="schedule-row"><span class="label">Days</span><span class="value">Tuesday & Thursday</span></div>
+      <div class="schedule-row"><span class="label">Time</span><span class="value">4:30 PM – 5:30 PM</span></div>
+      <div class="schedule-row"><span class="label">Session dates</span><span class="value">Aug 11 – Oct 17</span></div>
+      <div class="schedule-row"><span class="label">Spots remaining</span><span class="value">6 of 20</span></div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Emergency contact for this activity</label>
+      <div class="input-row">
+        <input class="input" placeholder="Contact name" value="">
+        <input class="input" placeholder="Phone number" value="">
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-secondary" onclick="document.getElementById('modalContent').innerHTML=paidStep1()">Back</button>
+    <button class="btn btn-primary" onclick="renderPaidStep3()">Continue to Payment <i class="ti ti-arrow-right"></i></button>
+  </div>`;
+}
+
+function renderPaidStep3(){
+  document.getElementById('modalContent').innerHTML = `
+  <div class="modal-header">
+    <div class="modal-title-group">
+      <div class="modal-eyebrow">Teen Paid Activity</div>
+      <div class="modal-title">Payment Details</div>
+    </div>
+    <button class="modal-close" onclick="closeModal()"><i class="ti ti-x"></i></button>
+  </div>
+  <div class="modal-body">
+    <div class="form-group">
+      <label class="form-label">Fees</label>
+      <div class="fee-line"><span class="fee-name">Session fee</span><span>$145.00</span></div>
+      <div class="fee-line"><span class="fee-name">Equipment fee<span class="fee-note">One-time, covers shared gear</span></span><span>$15.00</span></div>
+      <div class="fee-total-line"><span>Total due</span><span>$160.00</span></div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Payment method</label>
+      <input class="input" placeholder="Card number" value="•••• •••• •••• 4471" style="margin-bottom:10px;">
+      <div class="input-row">
+        <input class="input" placeholder="MM / YY" value="08/27">
+        <input class="input" placeholder="CVC" value="•••">
+      </div>
+    </div>
+    <div class="approval-note">
+      <i class="ti ti-info-circle"></i>
+      <div class="approval-note-text">
+        <strong>Your card will be authorized, not charged yet</strong>
+        Payment is collected only after a director approves this registration. If it's declined, you won't be charged.
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-secondary" onclick="renderPaidStep2()">Back</button>
+    <button class="btn btn-primary" onclick="renderPaidSuccess()">Submit Registration</button>
+  </div>`;
+}
+
+function renderPaidSuccess(){
+  document.getElementById('modalContent').innerHTML = `
+  <div class="modal-header">
+    <div></div>
+    <button class="modal-close" onclick="closeModal(); showToast('Registration submitted — awaiting director approval','clock-hour-4')"><i class="ti ti-x"></i></button>
+  </div>
+  <div class="modal-body">
+    <div class="success-state">
+      <div class="success-icon pending-icon"><i class="ti ti-clock-hour-4"></i></div>
+      <div class="success-title">Registration submitted</div>
+      <div class="success-text">Sofia T.'s registration for <strong>Teen Strength & Conditioning Club</strong> is now <strong>Waiting for Approval</strong>. You'll see a status update here as soon as the director reviews it — no action needed for now.</div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-primary btn-full" onclick="closeModal(); switchView('manage'); showToast('Registration submitted — awaiting director approval','clock-hour-4')">View in My Children's Status</button>
+  </div>`;
+}
+
+/* ---- TEEN OPEN REC: 1 step — child select, instant enroll, no payment/approval ---- */
+function openRecStep1(){
+  return `
+  <div class="modal-header">
+    <div class="modal-title-group">
+      <div class="modal-eyebrow">Teen Open Rec Activity</div>
+      <div class="modal-title">Select a Teen</div>
+    </div>
+    <button class="modal-close" onclick="closeModal()"><i class="ti ti-x"></i></button>
+  </div>
+  <div class="modal-body">
+    <div class="form-group">
+      <label class="form-label">Teen Open Rec — choose who's enrolling</label>
+      <div class="child-select-list" id="childList">
+        <label class="child-select-card" onclick="selectChild(this)">
+          <input type="radio" name="childPick" value="kai">
+          <div class="child-select-meta">
+            <div class="child-select-name">Kai T.</div>
+            <div class="child-select-grade">Age 16</div>
+          </div>
+        </label>
+      </div>
+    </div>
+    <div class="schedule-summary">
+      <div class="schedule-row"><span class="label">This week's session</span><span class="value">Wed, Jun 25 · 3:30–5:00 PM</span></div>
+      <div class="schedule-row"><span class="label">Cost</span><span class="value">Free</span></div>
+      <div class="schedule-row"><span class="label">Approval needed</span><span class="value">None</span></div>
+    </div>
+    <div class="approval-note" style="background:var(--info-bg);">
+      <i class="ti ti-refresh" style="color:var(--info);"></i>
+      <div class="approval-note-text" style="color:#1d4a82;">
+        <strong style="color:var(--info);">Schedule changes weekly</strong>
+        Open Rec days and times vary — check the portal calendar each week. Once enrolled, your teen is set for the full registration period; no need to re-enroll weekly.
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+    <button class="btn btn-primary" id="orNext1" disabled onclick="renderOpenRecSuccess()">Enroll Now</button>
+  </div>`;
+}
+
+function renderOpenRecSuccess(){
+  document.getElementById('modalContent').innerHTML = `
+  <div class="modal-header">
+    <div></div>
+    <button class="modal-close" onclick="closeModal(); showToast('Kai T. enrolled in Teen Open Rec','circle-check')"><i class="ti ti-x"></i></button>
+  </div>
+  <div class="modal-body">
+    <div class="success-state">
+      <div class="success-icon"><i class="ti ti-circle-check"></i></div>
+      <div class="success-title">You're enrolled!</div>
+      <div class="success-text">Kai T. is now <strong>Enrolled</strong> in Teen Open Rec — no approval needed. Remember to check the portal each week for the current schedule, since days and times may change.</div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-primary btn-full" onclick="closeModal(); switchView('manage'); showToast('Kai T. enrolled in Teen Open Rec','circle-check')">View in My Children's Status</button>
+  </div>`;
+}
+
+/* ---- TEEN TRIPS & TOURS: 3 steps — child select, schedule, multi-fee payment, waitlist-aware ---- */
+function tripsStep1(){
+  return `
+  <div class="modal-header">
+    <div class="modal-title-group">
+      <div class="modal-eyebrow">Teen Trips & Tours</div>
+      <div class="modal-title">Select a Teen</div>
+    </div>
+    <button class="modal-close" onclick="closeModal()"><i class="ti ti-x"></i></button>
+  </div>
+  <div class="modal-body">
+    <div class="step-indicator">
+      <div class="step-dot current"></div><div class="step-dot"></div><div class="step-dot"></div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Fall Teen Trip: Adventure Park & Lake Day — choose who's joining</label>
+      <div class="child-select-list" id="childList">
+        <label class="child-select-card" onclick="selectChild(this)">
+          <input type="radio" name="childPick" value="marcus">
+          <div class="child-select-meta">
+            <div class="child-select-name">Marcus T.</div>
+            <div class="child-select-grade">Age 15</div>
+          </div>
+        </label>
+        <label class="child-select-card" onclick="selectChild(this)">
+          <input type="radio" name="childPick" value="kai">
+          <div class="child-select-meta">
+            <div class="child-select-name">Kai T.</div>
+            <div class="child-select-grade">Age 16</div>
+          </div>
+        </label>
+      </div>
+    </div>
+    <div class="approval-note" style="background:var(--full-bg);">
+      <i class="ti ti-clock-hour-4" style="color:var(--full);"></i>
+      <div class="approval-note-text" style="color:#5c2d6e;">
+        <strong style="color:var(--full);">This trip is full</strong>
+        You'll be added to the waitlist. If a spot opens from a withdrawal, the next waitlisted teen is promoted automatically within 48 hours.
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+    <button class="btn btn-waitlist" id="tripsNext1" disabled onclick="renderTripsStep2()">Continue <i class="ti ti-arrow-right"></i></button>
+  </div>`;
+}
+
+function renderTripsStep2(){
+  document.getElementById('modalContent').innerHTML = `
+  <div class="modal-header">
+    <div class="modal-title-group">
+      <div class="modal-eyebrow">Teen Trips & Tours</div>
+      <div class="modal-title">Trip Details</div>
+    </div>
+    <button class="modal-close" onclick="closeModal()"><i class="ti ti-x"></i></button>
+  </div>
+  <div class="modal-body">
+    <div class="step-indicator">
+      <div class="step-dot done"></div><div class="step-dot current"></div><div class="step-dot"></div>
+    </div>
+    <div class="schedule-summary">
+      <div class="schedule-row"><span class="label">Trip</span><span class="value">Adventure Park & Lake Day</span></div>
+      <div class="schedule-row"><span class="label">Date</span><span class="value">Saturday, Sep 13</span></div>
+      <div class="schedule-row"><span class="label">Departs</span><span class="value">8:00 AM from main campus</span></div>
+      <div class="schedule-row"><span class="label">Returns</span><span class="value">6:00 PM</span></div>
+      <div class="schedule-row"><span class="label">Status</span><span class="value">Full — joining waitlist</span></div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Permission & emergency contact</label>
+      <div class="input-row">
+        <input class="input" placeholder="Contact name">
+        <input class="input" placeholder="Phone number">
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-secondary" onclick="document.getElementById('modalContent').innerHTML=tripsStep1()">Back</button>
+    <button class="btn btn-waitlist" onclick="renderTripsStep3()">Continue to Payment <i class="ti ti-arrow-right"></i></button>
+  </div>`;
+}
+
+function renderTripsStep3(){
+  document.getElementById('modalContent').innerHTML = `
+  <div class="modal-header">
+    <div class="modal-title-group">
+      <div class="modal-eyebrow">Teen Trips & Tours</div>
+      <div class="modal-title">Payment Details</div>
+    </div>
+    <button class="modal-close" onclick="closeModal()"><i class="ti ti-x"></i></button>
+  </div>
+  <div class="modal-body">
+    <div class="form-group">
+      <label class="form-label">Trip fees</label>
+      <div class="fee-line"><span class="fee-name">Admission<span class="fee-note">Adventure Park entry</span></span><span>$40.00</span></div>
+      <div class="fee-line"><span class="fee-name">Transportation<span class="fee-note">Round-trip charter bus</span></span><span>$18.00</span></div>
+      <div class="fee-line"><span class="fee-name">Meal voucher<span class="fee-note">Lunch on site</span></span><span>$12.00</span></div>
+      <div class="fee-total-line"><span>Total due</span><span>$70.00</span></div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Payment method</label>
+      <input class="input" placeholder="Card number" value="•••• •••• •••• 4471" style="margin-bottom:10px;">
+      <div class="input-row">
+        <input class="input" placeholder="MM / YY" value="08/27">
+        <input class="input" placeholder="CVC" value="•••">
+      </div>
+    </div>
+    <div class="approval-note">
+      <i class="ti ti-info-circle"></i>
+      <div class="approval-note-text">
+        <strong>You won't be charged while waitlisted</strong>
+        Your card is saved and authorized only. It's charged once a director approves a confirmed spot — not while waitlisted.
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-secondary" onclick="renderTripsStep2()">Back</button>
+    <button class="btn btn-waitlist" onclick="renderTripsSuccess()">Join Waitlist</button>
+  </div>`;
+}
+
+function renderTripsSuccess(){
+  document.getElementById('modalContent').innerHTML = `
+  <div class="modal-header">
+    <div></div>
+    <button class="modal-close" onclick="closeModal(); showToast('Added to waitlist — position 5 of 5','clock-hour-4')"><i class="ti ti-x"></i></button>
+  </div>
+  <div class="modal-body">
+    <div class="success-state">
+      <div class="success-icon pending-icon" style="background:var(--full-bg);color:var(--full);"><i class="ti ti-clock-hour-4"></i></div>
+      <div class="success-title">You're on the waitlist</div>
+      <div class="success-text">Marcus T. is <strong>Waitlisted</strong> for Adventure Park & Lake Day — position 5 of 5. If a spot opens, the next teen in line is promoted automatically within 48 hours and you'll see a status update here.</div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-primary btn-full" onclick="closeModal(); switchView('manage'); showToast('Added to waitlist — position 5 of 5','clock-hour-4')">View in My Children's Status</button>
+  </div>`;
+}
+
+/* ===================== WITHDRAW FLOW ===================== */
+function openWithdrawModal(regId, activityName, childName){
+  const isOpenRec = regId.includes('openrec');
+  document.getElementById('modalContent').innerHTML = `
+  <div class="modal-header">
+    <div class="modal-title-group">
+      <div class="modal-eyebrow">Withdraw Registration</div>
+      <div class="modal-title">${childName} — ${activityName}</div>
+    </div>
+    <button class="modal-close" onclick="closeModal()"><i class="ti ti-x"></i></button>
+  </div>
+  <div class="modal-body">
+    ${isOpenRec ? `
+      <div class="withdraw-warning">
+        <i class="ti ti-info-circle"></i>
+        <div>Open Rec has no waitlist, so withdrawing simply removes ${childName} from this activity. ${childName} can re-enroll any time during the registration period.</div>
+      </div>
+    ` : `
+      <div class="withdraw-warning">
+        <i class="ti ti-alert-triangle"></i>
+        <div>Withdrawing opens this spot to the waitlist. The next waitlisted teen will be <strong>automatically promoted within 48 hours</strong> if the spot stays open. This can't be undone — ${childName} would need to register again from scratch.</div>
+      </div>
+    `}
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-secondary" onclick="closeModal()">Keep Registration</button>
+    <button class="btn" style="background:var(--danger); color:#fff;" onclick="confirmWithdraw('${regId}','${activityName}','${childName}', ${!isOpenRec})">Withdraw</button>
+  </div>`;
+  document.getElementById('modalOverlay').classList.add('open');
+}
+
+function confirmWithdraw(regId, activityName, childName, triggersPromotion){
+  const row = document.querySelector(`[onclick*="${regId}"]`)?.closest('.program-card');
+  if(row) row.remove();
+  closeModal();
+  if(triggersPromotion){
+    showToast(`${childName} withdrawn from ${activityName} — waitlist promotion window started`, 'arrow-up-circle');
+    const log = document.getElementById('logEntries');
+    const entry = document.createElement('div');
+    entry.className = 'log-entry';
+    entry.innerHTML = `<div class="log-dot info"></div><div><div class="log-text">${childName} withdrawn from <strong>${activityName}</strong> — waitlist promotion will process within 48 hours</div><span class="log-time">Just now</span></div>`;
+    log.prepend(entry);
+  } else {
+    showToast(`${childName} withdrawn from ${activityName}`, 'circle-check');
+    const log = document.getElementById('logEntries');
+    const entry = document.createElement('div');
+    entry.className = 'log-entry';
+    entry.innerHTML = `<div class="log-dot neutral"></div><div><div class="log-text">${childName} withdrawn from <strong>${activityName}</strong></div><span class="log-time">Just now</span></div>`;
+    log.prepend(entry);
+  }
+}
+
+/* ===================== DETAIL MODAL (view-only) ===================== */
+function openDetailModal(regId){
+  document.getElementById('modalContent').innerHTML = `
+  <div class="modal-header">
+    <div class="modal-title-group">
+      <div class="modal-eyebrow">Registration Details</div>
+      <div class="modal-title">Teen Strength & Conditioning Club</div>
+    </div>
+    <button class="modal-close" onclick="closeModal()"><i class="ti ti-x"></i></button>
+  </div>
+  <div class="modal-body">
+    <div class="schedule-summary">
+      <div class="schedule-row"><span class="label">Teen</span><span class="value">Marcus T.</span></div>
+      <div class="schedule-row"><span class="label">Status</span><span class="value"><span class="status-pill pending">Waiting for Approval</span></span></div>
+      <div class="schedule-row"><span class="label">Submitted</span><span class="value">Yesterday, 4:02 PM</span></div>
+      <div class="schedule-row"><span class="label">Schedule</span><span class="value">Tue & Thu, 4:30–5:30 PM</span></div>
+      <div class="schedule-row"><span class="label">Session dates</span><span class="value">Aug 11 – Oct 17</span></div>
+      <div class="schedule-row"><span class="label">Total fees</span><span class="value">$160.00 (authorized, not charged)</span></div>
+    </div>
+    <div class="approval-note">
+      <i class="ti ti-clock-hour-4"></i>
+      <div class="approval-note-text">
+        <strong>Waiting on director review</strong>
+        Most approvals are completed within 2 business days. You'll get a status update here the moment it's reviewed.
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-secondary btn-full" onclick="closeModal()">Close</button>
+  </div>`;
+  document.getElementById('modalOverlay').classList.add('open');
+}
+</script>
+
+</body>
+</html>
