@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Add New Teen Activity — v3</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --teal: #00B0AC;
+    --teal-dark: #009490;
+    --teal-pale: #E6F7F6;
+    --teal-pale-2: #F2FBFA;
+    --sidebar: #2B2F38;
+    --sidebar-hover: #383D48;
+    --ink: #2B2F38;
+    --ink-soft: #5B6270;
+    --line: #DFE3E8;
+    --line-soft: #EDF0F3;
+    --red: #E0524C;
+    --red-pale: #FBEAE9;
+    --navy-pale: #EEF1F6;
+    --navy: #2A3A5C;
+    --white: #FFFFFF;
+    --radius: 6px;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: 'Nunito Sans', sans-serif;
+    background: #FAFBFC;
+    color: var(--ink);
+  }
+
+  .app { display: flex; min-height: 100vh; }
+
+  .sidebar {
+    width: 110px;
+    background: var(--sidebar);
+    color: #fff;
+    flex-shrink: 0;
+    padding: 18px 0 24px;
+  }
+  .sidebar-logo {
+    text-align: center;
+    margin-bottom: 22px;
+    padding: 0 10px;
+  }
+  .sidebar-logo .logo-mark {
+    width: 46px; height: 46px;
+    border-radius: 50%;
+    background: #fff;
+    margin: 0 auto 4px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 8px; font-weight: 800; color: var(--ink);
+  }
+  .sidebar-logo .logo-text { font-size: 11px; font-weight: 800; letter-spacing: 0.02em; color: #fff; }
+
+  .nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    padding: 11px 6px;
+    font-size: 11.5px;
+    font-weight: 700;
+    color: #B7BCC6;
+    cursor: pointer;
+    text-align: center;
+  }
+  .nav-item svg { width: 21px; height: 21px; }
+  .nav-item.active { color: var(--teal); }
+  .nav-item:hover:not(.active) { color: #fff; }
+
+  .main { flex: 1; min-width: 0; }
+
+  .topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 32px;
+    border-bottom: 1px solid var(--line);
+    background: #fff;
+  }
+  .topbar-left a { color: #3B8FD1; text-decoration: underline; font-size: 14px; font-weight: 600; }
+  .topbar-right { display: flex; align-items: center; gap: 18px; }
+  .topbar-right a { color: #3B8FD1; text-decoration: underline; font-size: 14px; font-weight: 600; }
+  .icon-btn {
+    width: 34px; height: 34px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .icon-btn.search { background: #3B8FD1; color: #fff; }
+  .icon-btn.avatar { background: #C7CBD1; color: #fff; }
+
+  .content { padding: 28px 36px 80px; max-width: 1500px; }
+
+  .page-title-row {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--line);
+    margin-bottom: 30px;
+  }
+  .page-title-row .back-arrow { font-size: 20px; color: var(--ink); cursor: pointer; }
+  .page-title-row h1 { font-size: 21px; font-weight: 800; margin: 0; color: var(--ink); }
+
+  .steps {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    margin-bottom: 34px;
+  }
+  .step { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+  .step-circle {
+    width: 30px; height: 30px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 800; font-size: 13.5px;
+    border: 2px solid var(--line);
+    color: var(--ink-soft);
+    background: #fff;
+  }
+  .step.active .step-circle { background: var(--teal); border-color: var(--teal); color: #fff; }
+  .step-label { font-size: 13.5px; font-weight: 700; color: var(--ink-soft); }
+  .step.active .step-label { color: var(--ink); }
+  .step-line { width: 220px; height: 1.5px; background: var(--line); margin-bottom: 24px; }
+
+  .section-title {
+    font-size: 17px;
+    font-weight: 800;
+    color: var(--ink);
+    margin: 0 0 12px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .form-card {
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 30px 36px 38px;
+  }
+
+  .form-row {
+    display: grid;
+    grid-template-columns: 230px 1fr;
+    gap: 18px;
+    align-items: start;
+    padding: 13px 0;
+  }
+  .form-label {
+    text-align: right;
+    font-size: 15px;
+    color: var(--ink);
+    padding-top: 11px;
+  }
+  .req { color: var(--red); margin-right: 3px; font-weight: 700; }
+
+  .std-input, .std-textarea, .std-select {
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    font-family: inherit;
+    font-size: 14.5px;
+    color: var(--ink);
+    background: #fff;
+    padding: 0 13px;
+    height: 40px;
+    max-width: 460px;
+    width: 100%;
+  }
+  .std-textarea { height: 76px; padding: 10px 13px; resize: none; max-width: 460px; }
+  .std-select {
+    appearance: none;
+    background: #fff url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="13" height="8" viewBox="0 0 14 9" fill="none"><path d="M1 1L7 7L13 1" stroke="%235B6270" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>') no-repeat right 13px center;
+    cursor: pointer;
+    max-width: 460px;
+  }
+  .std-input:focus, .std-textarea:focus, .std-select:focus { outline: 2px solid var(--teal); outline-offset: 1px; border-color: var(--teal); }
+
+  .date-range { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+  .date-range .to-label { color: var(--ink-soft); font-size: 14.5px; }
+  .date-input-wrap { position: relative; }
+  .date-input-wrap input { width: 165px; padding-right: 36px; }
+  .date-input-wrap svg { position: absolute; right: 11px; top: 50%; transform: translateY(-50%); pointer-events: none; color: var(--ink-soft); }
+
+  .radio-group { display: flex; align-items: center; gap: 26px; height: 40px; }
+  .radio-option { display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 15px; font-weight: 700; color: var(--ink); }
+  .radio-circle {
+    width: 19px; height: 19px;
+    border: 2px solid var(--line);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .radio-circle.checked { border-color: var(--teal); }
+  .radio-circle.checked::after { content: ''; width: 9px; height: 9px; border-radius: 50%; background: var(--teal); }
+
+  .footer-actions { display: flex; gap: 12px; padding-top: 20px; margin-top: 6px; }
+  .btn-cancel {
+    background: #fff; color: var(--teal-dark); border: 1.5px solid var(--teal);
+    font-weight: 700; font-size: 14.5px; padding: 9px 26px; border-radius: 6px; cursor: pointer;
+  }
+  .btn-save {
+    background: var(--teal); color: #fff; border: none;
+    font-weight: 700; font-size: 14.5px; padding: 9px 30px; border-radius: 6px; cursor: pointer;
+  }
+  .btn-save:hover { background: var(--teal-dark); }
+
+  /* ================= FEE SECTION v3 — consistent with form row pattern ================= */
+  .fee-section { max-width: 620px; }
+
+  .fee-sub-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 10px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--line-soft);
+  }
+  .fee-sub-label:not(:first-child) { margin-top: 20px; }
+  .fee-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .fee-dot.mandatory { background: var(--navy); }
+  .fee-dot.waivable { background: var(--teal); }
+  .fee-sub-text {
+    font-size: 13.5px;
+    font-weight: 800;
+    color: var(--ink);
+  }
+  .fee-sub-hint {
+    font-size: 12px;
+    color: var(--ink-soft);
+    font-weight: 600;
+    font-style: italic;
+    margin-left: auto;
+  }
+
+  .fee-line {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 8px;
+  }
+  .fee-line .fee-name-input {
+    flex: 1;
+    height: 38px;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 0 12px;
+    font-family: inherit;
+    font-size: 14px;
+    color: var(--ink);
+    min-width: 0;
+  }
+  .fee-line .fee-name-input:focus { outline: 2px solid var(--teal); outline-offset: 1px; border-color: var(--teal); }
+  .fee-line .fee-amt {
+    display: flex;
+    align-items: center;
+    height: 38px;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 0 11px;
+    width: 120px;
+    flex-shrink: 0;
+  }
+  .fee-line .fee-amt span {
+    color: var(--ink-soft);
+    font-weight: 700;
+    margin-right: 4px;
+    font-size: 14px;
+  }
+  .fee-line .fee-amt input {
+    border: none;
+    outline: none;
+    font-family: inherit;
+    font-size: 14px;
+    width: 100%;
+    color: var(--ink);
+  }
+  .fee-line .fee-remove {
+    width: 28px; height: 38px;
+    display: flex; align-items: center; justify-content: center;
+    color: #B7BCC6; cursor: pointer; font-size: 17px; border-radius: 5px;
+    flex-shrink: 0; background: none; border: none; font-family: inherit;
+  }
+  .fee-line .fee-remove:hover { background: var(--red-pale); color: var(--red); }
+
+  .fee-add-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    color: var(--teal-dark);
+    font-weight: 700;
+    font-size: 13px;
+    cursor: pointer;
+    background: none;
+    border: none;
+    font-family: inherit;
+    padding: 4px 0;
+    margin-top: 2px;
+  }
+  .fee-add-link:hover { text-decoration: underline; }
+  .fee-add-link svg { flex-shrink: 0; }
+
+  .fee-subtotal-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 6px 0 0;
+    margin-top: 4px;
+    font-size: 13px;
+  }
+  .fee-subtotal-row .lbl { color: var(--ink-soft); font-weight: 600; }
+  .fee-subtotal-row .amt { font-weight: 800; color: var(--ink); }
+
+  .fee-divider {
+    height: 1px;
+    background: var(--line);
+    margin: 16px 0 14px;
+  }
+
+  .fee-total-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border: 1.5px solid var(--line);
+    border-radius: var(--radius);
+    padding: 12px 16px;
+    background: #fff;
+    margin-top: 10px;
+  }
+  .fee-total-row .total-label {
+    font-size: 14px;
+    font-weight: 800;
+    color: var(--ink);
+  }
+  .fee-total-row .total-breakdown {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+  .fee-total-row .total-item {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+  }
+  .fee-total-row .total-item .t-label {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--ink-soft);
+  }
+  .fee-total-row .total-item .t-value {
+    font-size: 15px;
+    font-weight: 800;
+    color: var(--ink);
+  }
+  .fee-total-row .total-item.highlight .t-value {
+    color: var(--teal-dark);
+  }
+  .fee-total-divider {
+    width: 1px;
+    height: 28px;
+    background: var(--line);
+  }
+
+  @media (max-width: 900px) {
+    .form-row { grid-template-columns: 1fr; }
+    .form-label { text-align: left; padding-top: 0; }
+    .fee-line { flex-wrap: wrap; }
+    .fee-line .fee-amt { width: 100%; }
+    .fee-total-row .total-breakdown { flex-wrap: wrap; gap: 12px; }
+  }
+</style>
+</head>
+<body>
+<div class="app">
+
+  <div class="sidebar">
+    <div class="sidebar-logo">
+      <div class="logo-mark">CYP</div>
+      <div class="logo-text">NAVY CYP</div>
+    </div>
+    <div class="nav-item active">
+      <svg viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="7" height="9" rx="1" stroke="currentColor" stroke-width="1.6"/><rect x="14" y="3" width="7" height="5" rx="1" stroke="currentColor" stroke-width="1.6"/><rect x="14" y="12" width="7" height="9" rx="1" stroke="currentColor" stroke-width="1.6"/><rect x="3" y="16" width="7" height="5" rx="1" stroke="currentColor" stroke-width="1.6"/></svg>
+      Dashboard
+    </div>
+    <div class="nav-item"><svg viewBox="0 0 24 24" fill="none"><circle cx="9" cy="8" r="3" stroke="currentColor" stroke-width="1.6"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6" stroke="currentColor" stroke-width="1.6"/><circle cx="17" cy="9" r="2.3" stroke="currentColor" stroke-width="1.6"/><path d="M15 20c0-2.5 1.8-4.5 4-4.8" stroke="currentColor" stroke-width="1.6"/></svg>Families</div>
+    <div class="nav-item"><svg viewBox="0 0 24 24" fill="none"><circle cx="8" cy="6" r="2.4" stroke="currentColor" stroke-width="1.6"/><circle cx="16" cy="6" r="2.4" stroke="currentColor" stroke-width="1.6"/><path d="M3 19c0-2.8 2.2-5 5-5s5 2.2 5 5M11 19c0-2.8 2.2-5 5-5s5 2.2 5 5" stroke="currentColor" stroke-width="1.6"/></svg>Children</div>
+    <div class="nav-item"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="7" r="3.2" stroke="currentColor" stroke-width="1.6"/><path d="M5 21c0-3.9 3.1-7 7-7s7 3.1 7 7" stroke="currentColor" stroke-width="1.6"/></svg>Staff</div>
+    <div class="nav-item"><svg viewBox="0 0 24 24" fill="none"><rect x="3" y="6" width="18" height="13" rx="1.5" stroke="currentColor" stroke-width="1.6"/><path d="M3 9h18" stroke="currentColor" stroke-width="1.6"/></svg>TAP</div>
+    <div class="nav-item"><svg viewBox="0 0 24 24" fill="none"><path d="M12 4L20 19H4L12 4Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M9.5 14.5H14.5" stroke="currentColor" stroke-width="1.6"/></svg>Activity</div>
+    <div class="nav-item"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="6" r="2.5" stroke="currentColor" stroke-width="1.6"/><path d="M12 8.5V15M8 21l4-6 4 6M8 12l4 1 4-1" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>YP</div>
+    <div class="nav-item"><svg viewBox="0 0 24 24" fill="none"><path d="M5 20L12 3L19 20" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M8.5 13H15.5" stroke="currentColor" stroke-width="1.6"/></svg>Camp</div>
+    <div class="nav-item"><svg viewBox="0 0 24 24" fill="none"><rect x="3" y="5" width="18" height="14" rx="1.5" stroke="currentColor" stroke-width="1.6"/><path d="M3 6L12 13L21 6" stroke="currentColor" stroke-width="1.6"/></svg>Communication</div>
+    <div class="nav-item"><svg viewBox="0 0 24 24" fill="none"><path d="M4 7H20M4 12H20M4 17H20" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><circle cx="8" cy="7" r="1.6" fill="currentColor"/><circle cx="16" cy="12" r="1.6" fill="currentColor"/><circle cx="10" cy="17" r="1.6" fill="currentColor"/></svg>Functions</div>
+    <div class="nav-item"><svg viewBox="0 0 24 24" fill="none"><rect x="4" y="13" width="3.5" height="7" stroke="currentColor" stroke-width="1.6"/><rect x="10.2" y="9" width="3.5" height="11" stroke="currentColor" stroke-width="1.6"/><rect x="16.4" y="5" width="3.5" height="15" stroke="currentColor" stroke-width="1.6"/></svg>Report</div>
+    <div class="nav-item"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.6"/><path d="M12 3V5.5M12 18.5V21M21 12H18.5M5.5 12H3M18 6L16.3 7.7M7.7 16.3L6 18M18 18L16.3 16.3M7.7 7.7L6 6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>Setup</div>
+  </div>
+
+  <div class="main">
+    <div class="topbar">
+      <div class="topbar-left"><a href="#">Select a different center</a></div>
+      <div class="topbar-right">
+        <a href="#">Admin Home</a>
+        <div class="icon-btn search"><svg width="15" height="15" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="white" stroke-width="2"/><path d="M21 21L16.5 16.5" stroke="white" stroke-width="2" stroke-linecap="round"/></svg></div>
+        <div class="icon-btn avatar"><svg width="16" height="16" viewBox="0 0 24 24" fill="white"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4.4 3.6-8 8-8s8 3.6 8 8"/></svg></div>
+      </div>
+    </div>
+
+    <div class="content">
+      <div class="page-title-row">
+        <span class="back-arrow">&larr;</span>
+        <h1>Add New Teen Activity</h1>
+      </div>
+
+      <div class="steps">
+        <div class="step active">
+          <div class="step-circle">1</div>
+          <div class="step-label">Teen Activity</div>
+        </div>
+        <div class="step-line"></div>
+        <div class="step">
+          <div class="step-circle">2</div>
+          <div class="step-label">Confirmation</div>
+        </div>
+      </div>
+
+      <h2 class="section-title">Activity</h2>
+
+      <div class="form-card">
+
+        <div class="form-row">
+          <div class="form-label"><span class="req">*</span>Select Activity</div>
+          <div class="radio-group">
+            <div class="radio-option"><div class="radio-circle"></div>Teen Activity</div>
+            <div class="radio-option"><div class="radio-circle"></div>Teen Open Rec</div>
+            <div class="radio-option"><div class="radio-circle checked"></div>Teen Trips &amp; Tours</div>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-label"><span class="req">*</span>Teen Trips &amp; Tours Activity Name</div>
+          <input class="std-input" type="text">
+        </div>
+
+        <div class="form-row">
+          <div class="form-label"><span class="req">*</span>Description</div>
+          <textarea class="std-textarea"></textarea>
+        </div>
+
+        <div class="form-row">
+          <div class="form-label"><span class="req">*</span>Registration Period</div>
+          <div class="date-range">
+            <span class="to-label">From</span>
+            <div class="date-input-wrap">
+              <input class="std-input" type="text" placeholder="MM/DD/YYYY">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><rect x="3" y="5" width="18" height="16" rx="2" stroke="currentColor" stroke-width="1.6"/><path d="M3 9H21M8 3V6M16 3V6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+            </div>
+            <span class="to-label">To</span>
+            <div class="date-input-wrap">
+              <input class="std-input" type="text" placeholder="MM/DD/YYYY">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><rect x="3" y="5" width="18" height="16" rx="2" stroke="currentColor" stroke-width="1.6"/><path d="M3 9H21M8 3V6M16 3V6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-label"><span class="req">*</span>Teen Trips &amp; Tours Activity Period</div>
+          <div class="date-range">
+            <span class="to-label">From</span>
+            <div class="date-input-wrap">
+              <input class="std-input" type="text" placeholder="MM/DD/YYYY">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><rect x="3" y="5" width="18" height="16" rx="2" stroke="currentColor" stroke-width="1.6"/><path d="M3 9H21M8 3V6M16 3V6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+            </div>
+            <span class="to-label">To</span>
+            <div class="date-input-wrap">
+              <input class="std-input" type="text" placeholder="MM/DD/YYYY">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><rect x="3" y="5" width="18" height="16" rx="2" stroke="currentColor" stroke-width="1.6"/><path d="M3 9H21M8 3V6M16 3V6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+            </div>
+          </div>
+        </div>
+
+        <!-- ================= FEE v3 — inline, consistent with form row pattern ================= -->
+        <div class="form-row">
+          <div class="form-label" style="padding-top: 13px;"><span class="req">*</span>Fee</div>
+          <div class="fee-section">
+
+            <!-- Mandatory sub-section -->
+            <div class="fee-sub-label">
+              <div class="fee-dot mandatory"></div>
+              <span class="fee-sub-text">Mandatory</span>
+              <span class="fee-sub-hint">Always charged to every family</span>
+            </div>
+
+            <div id="mandatory-fees">
+              <div class="fee-line">
+                <input type="text" class="fee-name-input" placeholder="e.g. Transportation Fee">
+                <div class="fee-amt"><span>$</span><input type="text" placeholder="0.00" class="fee-val"></div>
+                <button type="button" class="fee-remove">&times;</button>
+              </div>
+            </div>
+            <button type="button" class="fee-add-link" data-target="mandatory-fees">
+              <svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M8 2.5V13.5M2.5 8H13.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+              + Add Another fee
+            </button>
+
+            <div class="fee-subtotal-row">
+              <span class="lbl">Mandatory subtotal</span>
+              <span class="amt" id="sub-mandatory">$0.00</span>
+            </div>
+
+            <!-- Waivable sub-section -->
+            <div class="fee-sub-label">
+              <div class="fee-dot waivable"></div>
+              <span class="fee-sub-text">Waivable</span>
+              <span class="fee-sub-hint">Waived if family holds membership / pass</span>
+            </div>
+
+            <div id="waivable-fees">
+              <div class="fee-line">
+                <input type="text" class="fee-name-input" placeholder="e.g. Entry Fee">
+                <div class="fee-amt"><span>$</span><input type="text" placeholder="0.00" class="fee-val"></div>
+                <button type="button" class="fee-remove">&times;</button>
+              </div>
+            </div>
+            <button type="button" class="fee-add-link" data-target="waivable-fees">
+              <svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M8 2.5V13.5M2.5 8H13.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+              + Add Another fee
+            </button>
+
+            <div class="fee-subtotal-row">
+              <span class="lbl">Waivable subtotal</span>
+              <span class="amt" id="sub-waivable">$0.00</span>
+            </div>
+
+            <!-- Total summary -->
+            <div class="fee-total-row">
+              <div class="total-label">Total</div>
+              <div class="total-breakdown">
+                <div class="total-item">
+                  <span class="t-label">Mandatory</span>
+                  <span class="t-value" id="tot-mandatory">$0.00</span>
+                </div>
+                <div class="fee-total-divider"></div>
+                <div class="total-item">
+                  <span class="t-label">Waivable</span>
+                  <span class="t-value" id="tot-waivable">$0.00</span>
+                </div>
+                <div class="fee-total-divider"></div>
+                <div class="total-item highlight">
+                  <span class="t-label">Max per family</span>
+                  <span class="t-value" id="tot-max">$0.00</span>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+        <!-- ================= END FEE v3 ================= -->
+
+        <div class="form-row">
+          <div class="form-label"><span class="req">*</span>Bill Code</div>
+          <select class="std-select"><option>Select</option></select>
+        </div>
+        <div class="form-row">
+          <div class="form-label"><span class="req">*</span>Event Format</div>
+          <select class="std-select"><option>Select</option></select>
+        </div>
+        <div class="form-row">
+          <div class="form-label"><span class="req">*</span>OSD Classification</div>
+          <select class="std-select"><option>Select</option></select>
+        </div>
+        <div class="form-row">
+          <div class="form-label"><span class="req">*</span>BGCA</div>
+          <select class="std-select"><option>Select</option></select>
+        </div>
+        <div class="form-row">
+          <div class="form-label"><span class="req">*</span>4H</div>
+          <select class="std-select"><option>Select</option></select>
+        </div>
+        <div class="form-row">
+          <div class="form-label"><span class="req">*</span>NAYS</div>
+          <select class="std-select"><option>Select</option></select>
+        </div>
+        <div class="form-row">
+          <div class="form-label"><span class="req">*</span>Waitlist</div>
+          <div class="radio-group">
+            <div class="radio-option"><div class="radio-circle"></div>Yes</div>
+            <div class="radio-option"><div class="radio-circle checked"></div>No</div>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-label"><span class="req">*</span>Maximum Participant</div>
+          <input class="std-input" type="text" style="max-width: 280px;">
+        </div>
+        <div class="form-row">
+          <div class="form-label"><span class="req">*</span>Minimum Participant</div>
+          <input class="std-input" type="text" style="max-width: 280px;">
+        </div>
+        <div class="form-row">
+          <div class="form-label"><span class="req">*</span>Coordinator Name</div>
+          <input class="std-input" type="text">
+        </div>
+        <div class="form-row">
+          <div class="form-label"><span class="req">*</span>Email</div>
+          <input class="std-input" type="text">
+        </div>
+        <div class="form-row">
+          <div class="form-label"><span class="req">*</span>Phone</div>
+          <input class="std-input" type="text" style="max-width: 280px;">
+        </div>
+        <div class="form-row">
+          <div class="form-label"><span class="req">*</span>Meeting Location</div>
+          <textarea class="std-textarea"></textarea>
+        </div>
+        <div class="form-row">
+          <div class="form-label"><span class="req">*</span>Publish Activity</div>
+          <div class="radio-group">
+            <div class="radio-option"><div class="radio-circle checked"></div>Yes</div>
+            <div class="radio-option"><div class="radio-circle"></div>No</div>
+          </div>
+        </div>
+
+        <div class="footer-actions">
+          <button class="btn-cancel" type="button">Cancel</button>
+          <button class="btn-save" type="button">Save</button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  function recalcTotals() {
+    let m = 0, w = 0;
+    document.querySelectorAll('#mandatory-fees .fee-val').forEach(inp => {
+      const v = parseFloat(inp.value);
+      if (!isNaN(v)) m += v;
+    });
+    document.querySelectorAll('#waivable-fees .fee-val').forEach(inp => {
+      const v = parseFloat(inp.value);
+      if (!isNaN(v)) w += v;
+    });
+    document.getElementById('sub-mandatory').textContent = '$' + m.toFixed(2);
+    document.getElementById('sub-waivable').textContent = '$' + w.toFixed(2);
+    document.getElementById('tot-mandatory').textContent = '$' + m.toFixed(2);
+    document.getElementById('tot-waivable').textContent = '$' + w.toFixed(2);
+    document.getElementById('tot-max').textContent = '$' + (m + w).toFixed(2);
+  }
+
+  function bindFeeLine(line) {
+    line.querySelector('.fee-val').addEventListener('input', recalcTotals);
+    line.querySelector('.fee-remove').addEventListener('click', () => {
+      line.remove();
+      recalcTotals();
+    });
+  }
+
+  document.querySelectorAll('.fee-line').forEach(bindFeeLine);
+
+  document.querySelectorAll('.fee-add-link').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const container = document.getElementById(btn.dataset.target);
+      const isMandatory = btn.dataset.target === 'mandatory-fees';
+      const line = document.createElement('div');
+      line.className = 'fee-line';
+      line.innerHTML = `
+        <input type="text" class="fee-name-input" placeholder="${isMandatory ? 'e.g. Equipment Fee' : 'e.g. Parking Fee'}">
+        <div class="fee-amt"><span>$</span><input type="text" placeholder="0.00" class="fee-val"></div>
+        <button type="button" class="fee-remove">&times;</button>
+      `;
+      container.appendChild(line);
+      bindFeeLine(line);
+      line.querySelector('.fee-name-input').focus();
+    });
+  });
+
+  document.querySelectorAll('.radio-option').forEach(opt => {
+    opt.addEventListener('click', () => {
+      const group = opt.parentElement;
+      group.querySelectorAll('.radio-circle').forEach(c => c.classList.remove('checked'));
+      opt.querySelector('.radio-circle').classList.add('checked');
+    });
+  });
+</script>
+</body>
+</html>
